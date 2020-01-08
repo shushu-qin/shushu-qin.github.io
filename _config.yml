@@ -7,7 +7,7 @@ url                          : "" # the base hostname & protocol for your site
 blog:
   title                      : FEM 
   description                  : >
-                               Blog of an engineern who loves Finite Element Analysis.
+                               Blog of an engineer who loves Finite Element Analysis.
 
 # Layout configuration
   logo_path                  : "assets/img/dactl.svg" # path to logo file
