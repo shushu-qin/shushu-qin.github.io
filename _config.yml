@@ -11,7 +11,7 @@ blog:
 
 # Layout configuration
   logo_path                  : "assets/img/dactl.svg" # path to logo file
-  search_path                : # "yourgitusername.github.io"
+  search_path                : "shushu-qin.github.io"
                                # needed for searchbox in archive page
   hero_layout                : false # turn on hero layout for blog and posts
   hero_placeholder           : "assets/img/generic_hero.jpg" # placeholder for hero image
@@ -34,10 +34,10 @@ author:
   github                    : shushu-qin
   #youtube                   : youtube-user-name
   #stackoverflow             : stackoverflow-user-name
-  #disqus                    : dactl # your disqus site name
+  disqus                    : shush-qin-github-io # your disqus site name
   #google_analytics          : # 'UA-XXXXXXXX-X'
-  photo                     : "uploads/me2.png"
-  photo2x                   : "uploads/me.png"
+  photo                     : "uploads/me2.jpg"
+  photo2x                   : "uploads/me2.jpg"
 
 
 

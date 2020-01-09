@@ -48,6 +48,13 @@
             </a>
         </li>
         {% endif %}
+        {% if site.author.linkedin %}
+        <li>
+            <a href="https://www.linkedin.com/in/{{ site.author.linkedin }}" target="_blank" class="smaller">
+                <span class="icon-linkedin"></span>
+            </a>
+        </li>
+        {% endif %}
         {% if site.author.rss == true %}
         <li>
             <a href="{{ '/feed.xml' | prepend: site.baseurl }}" target="_blank">
