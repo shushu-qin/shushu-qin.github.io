@@ -7,12 +7,12 @@ hero: https://source.unsplash.com/collection/430471/
 layout: post
 ---
 
-在有限元程序计算中，最终我们会得到Ax=b这样一个线性方程组，在MATLAB里，一个最简单的求解线性方程组问题的方法就是x=A\b。
+在有限元程序计算中，最终我们会得到Ax=b这样一个线性方程组，在MATLAB里，一个最简单的求解线性方程组问题的方法就是x=A\b。<!–-break-–>
 
 最近在做有限元软件开源矩阵求解器的集成。说到矩阵运算，最简单的方法就是打开MATLAB，输入 x=A\b，然后就是等结果了，而其他迭代法求解也有很多易用的接口。被MATLAB宠坏的我，在转到其他开源的矩阵求解库的过程中也是经历了各种曲折，在此写个总结，分享一下我对数值计算中线性方程组求解的理解。 
-<!–-break-–>
 
-一开始接到有限元稀疏矩阵求解的项目时，我无数遍问自己为什么不用MATLAB？但是企业不是学校，开发软件是要盈利的，MATLAB的license太贵了，而且并不开源，想要开发一个全自主产权的软件，这条路显然是走不通的。在这种情况下，我尝试寻找可用的开源软件，遇到了一堆名词，LAPACK，BLAS，MKL，Eigen，Pardiso，Armadillo，SuperLU，MUMPS，etc。在[这个网址](http://www.netlib.org/utk/people/JackDongarra/la-sw.html)总结了各个线性代数求解库的特性和适用范围，大家可以参考一下。直接法
+
+一开始接到有限元稀疏矩阵求解的项目时，我无数遍问自己为什么不用MATLAB？但是企业不是学校，开发软件是要盈利的，MATLAB的license太贵了，而且并不开源，想要开发一个全自主产权的软件，这条路显然是走不通的。在这种情况下，我尝试寻找可用的开源软件，遇到了一堆名词，LAPACK，BLAS，MKL，Eigen，Pardiso，Armadillo，SuperLU，MUMPS，etc。在[这个网址](http://www.netlib.org/utk/people/JackDongarra/la-sw.html)总结了各个线性代数求解库的特性和适用范围，大家可以参考一下。
 
 我又无数遍问自己。。。。 
 

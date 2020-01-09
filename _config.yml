@@ -27,9 +27,9 @@ blog:
 # Author info
 author:
   fullname                  : Shushu Qin
-  #rss                       : true # generate RSS feed and show it's icon in header
+  rss                       : true # generate RSS feed and show it's icon in header
   mail                      : shushuqin2011@gmail.com # change to your e-mail address
-  linkedin                  : shushu-qin-02040a11a     
+  # linkedin                  : shushu-qin-02040a11a     
   #twitter                   : twitter-user-name
   github                    : shushu-qin
   #youtube                   : youtube-user-name
@@ -49,6 +49,8 @@ author:
 plugins:
   - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-feed
 
 # Permalinks
 permalink                    : posts/:slug
