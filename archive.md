@@ -1,7 +1,7 @@
 ---
-layout: page
 title: Archive
-permalink: /archive/
+layout: page
+permalink: "/archive/"
 weight: 5
 sitemap:
   priority: 0.9
@@ -9,9 +9,6 @@ sitemap:
 
 <div class="page">
 
-{% capture page_subtitle %}
-  {% include page/searchbox.html %}
-{% endcapture %}
 
 {% include page/title.html title=page.title subtitle=page_subtitle %}
 
