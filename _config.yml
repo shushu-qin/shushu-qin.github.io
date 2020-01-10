@@ -21,9 +21,9 @@ title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Shushu QIN"
 description              : "Computational mechanics"
-url                      : https://shushu-qin.github.io
+url                      : "https://robbievanleeuwen.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
-repository               : shushu-qin/shushu-qin.github.io
+repository               : "shushu-qin/shushu-qin.github.io"
 teaser                   : #/assets/images/me.jpg
 logo                     : /assets/images/gray-gear.jpg
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
