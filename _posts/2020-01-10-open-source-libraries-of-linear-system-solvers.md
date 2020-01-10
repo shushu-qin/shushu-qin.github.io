@@ -2,7 +2,7 @@
 title: Open source libraries of Linear system solvers
 tags: fem
 published: true
-layout: post
+layout: posts
 ---
 
 在有限元程序计算中，最终我们会得到Ax=b这样一个线性方程组，在MATLAB里，一个最简单的求解线性方程组问题的方法就是x=A\b。最近在做有限元软件开源矩阵求解器的集成。

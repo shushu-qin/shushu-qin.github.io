@@ -1,6 +1,6 @@
 ---
 title: Milui jie Schnee
-layout: post
+layout: posts
 tags:
 - fem
 hero: https://source.unsplash.com/collection/430471/

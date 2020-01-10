@@ -3,3 +3,5 @@ secret.yml
 caefem.jpg
 # temporary files
 *.temp
+# cache
+.sass-cache/*

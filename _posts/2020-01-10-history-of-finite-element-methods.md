@@ -2,7 +2,7 @@
 title: History of Finite Element Methods
 tags: fem
 published: true
-layout: post
+layout: posts
 ---
 
 ### 有限元的发明者

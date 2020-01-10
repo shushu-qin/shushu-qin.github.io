@@ -1,4 +1,0 @@
----
-slug: hpc
-name: hpc
----
