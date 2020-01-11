@@ -99,9 +99,9 @@ analytics:
 # Site Author
 author:
   name             : "Shushu Qin"
-  avatar           : "/assets/images/me.jpg"
+  avatar           : "/assets/images/me1.jpg"
   bio              : "a CAE software engineer who has the passion to share thoughts and ideas through website"
-  location         : "Guangzhou"
+  location         : #
   email            : # "shushuqin2011@gmail.com"
   links:
     - label: "Email"
