@@ -1,11 +1,11 @@
 ---
-title: MPI安装及编译
+title: MPICH安装及编译
 tags: [HPC, MPI]
 published: true
 layout: posts
 ---
 
-### Install MPI
+### Install MPICH
 
 这里我们采用MPICH的MPI实现，下载官网http://www.mpich.org/downloads/。Mac系统可以直接通过homebrew安装MPI
 
