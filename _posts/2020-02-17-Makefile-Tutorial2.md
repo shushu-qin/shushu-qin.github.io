@@ -1,7 +1,9 @@
+---
 title: Makefile入门2
 tags: [linux]
 published: true
 layout: posts
+---
 
 本文通过下面这个基本版Makefile来学习Makefile的书写规则。
 
