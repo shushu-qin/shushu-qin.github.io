@@ -1,0 +1,58 @@
+<h3 id="install-mpi">Install MPI</h3>
+
+<p>这里我们采用MPICH的MPI实现，下载官网http://www.mpich.org/downloads/。Mac系统可以直接通过homebrew安装MPI</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ brew install mpich
+</code></pre></div></div>
+
+<h3 id="程序基本结构">程序基本结构</h3>
+
+<ul>
+  <li>进入并行环境<code class="highlighter-rouge">MPI_Init</code>：让系统知道此程序是并行程序，启动并行计算环境。</li>
+  <li>主体并行程序：实现并行的代码。</li>
+  <li>退出并行环境<code class="highlighter-rouge">MPI_Finalize</code>：通知系统，从这里开始，不再使用并行环境。</li>
+</ul>
+
+<h3 id="编写hello-world小程序">编写Hello world小程序</h3>
+
+<p>所有的MPI函数都是以<code class="highlighter-rouge">MPI_</code>前缀开头，接 MPI_ 之后的第一个字母大写, 其余全部为小写字母。函数调用结束后会返回int 类型的错误信息码，当 MPI 程序不出错的时候返回<code class="highlighter-rouge">MPI_SUCCESS</code>。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* MPI_HelloWorld.c */</span>
+<span class="cp">#include &lt;stdio.h&gt;
+#include &lt;mpi.h&gt;  // 引入MPI头文件
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>    
+    <span class="kt">int</span> <span class="n">info</span><span class="p">,</span> <span class="n">flag</span><span class="p">;</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">MPI_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span> <span class="c1">// 初始化MPI</span>
+  
+    <span class="c1">// 得到进程数量</span>
+    <span class="kt">int</span> <span class="n">world_size</span><span class="p">;</span>
+    <span class="n">MPI_Comm_size</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">world_size</span><span class="p">);</span>
+  
+	  <span class="c1">// 得到当前进程的秩</span>
+    <span class="kt">int</span> <span class="n">world_rank</span><span class="p">;</span>
+    <span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">world_rank</span><span class="p">);</span>
+  
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Hello world!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    
+    <span class="n">info</span> <span class="o">=</span> <span class="n">MPI_Initialized</span><span class="p">(</span><span class="o">&amp;</span><span class="n">flag</span><span class="p">);</span> <span class="c1">// 查看MPI是否被初始化</span>
+    
+    <span class="n">info</span> <span class="o">=</span> <span class="n">MPI_Finalize</span><span class="p">();</span>  <span class="c1">//</span>
+  
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>使用<code class="highlighter-rouge">mpicc</code>命令编译c代码</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ mpicc -g -o MPI_HelloWorld MPI_HelloWorld.c
+</code></pre></div></div>
+
+<p>运行需要使用 <code class="highlighter-rouge">mpiexec</code> 命令</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ mpiexec -np 2 MPI_HelloWorld
+Hello world!
+Hello world!
+</code></pre></div></div>
+

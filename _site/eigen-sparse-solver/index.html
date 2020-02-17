@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Open source libraries of Linear system solvers - Computational Mechanics Blog</title>
-<meta name="description" content="在有限元程序计算中，最终我们会得到Ax=b这样一个线性方程组，在MATLAB里，一个最简单的求解线性方程组问题的方法就是x=A\b。最近在做有限元软件开源矩阵求解器的集成。说到矩阵运算，最简单的方法就是打开MATLAB，输入 x=A\b，然后就是等结果了，而其他迭代法求解也有很多易用的接口。被MATLAB宠坏的我，在转到其他开源的矩阵求解库的过程中也是经历了各种曲折，在此写个总结，分享一下我对数值计算中线性方程组求解的理解。">
+<!-- begin _includes/seo.html --><title>Basic Steps of Using Eigen to Solve Sparse System - Computational Mechanics Blog</title>
+<meta name="description" content="计算Ax=b，A为稀疏矩阵。">
 
 
   <meta name="author" content="Shushu Qin">
@@ -19,30 +19,30 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Computational Mechanics Blog">
-<meta property="og:title" content="Open source libraries of Linear system solvers">
-<meta property="og:url" content="http://localhost:4000/open-source-libraries-of-linear-system-solvers/">
+<meta property="og:title" content="Basic Steps of Using Eigen to Solve Sparse System">
+<meta property="og:url" content="http://localhost:4000/eigen-sparse-solver/">
 
 
-  <meta property="og:description" content="在有限元程序计算中，最终我们会得到Ax=b这样一个线性方程组，在MATLAB里，一个最简单的求解线性方程组问题的方法就是x=A\b。最近在做有限元软件开源矩阵求解器的集成。说到矩阵运算，最简单的方法就是打开MATLAB，输入 x=A\b，然后就是等结果了，而其他迭代法求解也有很多易用的接口。被MATLAB宠坏的我，在转到其他开源的矩阵求解库的过程中也是经历了各种曲折，在此写个总结，分享一下我对数值计算中线性方程组求解的理解。">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-01-10T00:00:00+08:00">
+  <meta property="og:description" content="计算Ax=b，A为稀疏矩阵。">
 
 
 
 
 
-  
+
+
+  <meta property="article:published_time" content="2020-01-13T00:00:00+08:00">
+
+
+
+
 
   
 
+  
 
-<link rel="canonical" href="http://localhost:4000/open-source-libraries-of-linear-system-solvers/">
+
+<link rel="canonical" href="http://localhost:4000/eigen-sparse-solver/">
 
 
 
@@ -274,70 +274,168 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Open source libraries of Linear system solvers</h1>
+      <h1 id="page-title" class="page__title">Basic Steps of Using Eigen to Solve Sparse System</h1>
     
-    <p>在有限元程序计算中，最终我们会得到Ax=b这样一个线性方程组，在MATLAB里，一个最简单的求解线性方程组问题的方法就是x=A\b。最近在做有限元软件开源矩阵求解器的集成。
-说到矩阵运算，最简单的方法就是打开MATLAB，输入 x=A\b，然后就是等结果了，而其他迭代法求解也有很多易用的接口。被MATLAB宠坏的我，在转到其他开源的矩阵求解库的过程中也是经历了各种曲折，在此写个总结，分享一下我对数值计算中线性方程组求解的理解。</p>
-
-<p>一开始接到有限元稀疏矩阵求解的项目时，我无数遍问自己为什么不用MATLAB？但是企业不是学校，开发软件是要盈利的，MATLAB的license太贵了，而且并不开源，想要开发一个全自主产权的软件，这条路显然是走不通的。在这种情况下，我尝试寻找可用的开源软件，遇到了一堆名词，LAPACK，BLAS，MKL，Eigen，Pardiso，Armadillo，SuperLU，MUMPS，etc。在<a href="http://www.netlib.org/utk/people/JackDongarra/la-sw.html">这个网址</a>总结了各个线性代数求解库的特性和适用范围，大家可以参考一下。</p>
-
-<p>我又无数遍问自己。。。。</p>
-
-<h2 id="1解线性方程组不就是lu分解或者是迭代法吗为什么要用这些软件不直接自己写一个">1.解线性方程组不就是LU分解或者是迭代法吗，为什么要用这些软件，不直接自己写一个？</h2>
-
-<p>看了Davis讲稀疏矩阵直接求解法的第一课之后（看第二课时我就开始怀疑自己的智商了），我开始明白从书上写的pseudocode到真正的代码实现之间，有很长的路要走。虽然LU分解基于Gaussian Elimination， 但要做到内存占用小，代码效率高，甚至并行化，将书上的算法照搬写成代码肯定会在大型矩阵运算（一百万以上自由度）时捉襟见肘。所以，不能重复造轮子，尤其是劣质的轮子。</p>
-
-<h2 id="2---eigenmklarmadillo的说明文档中都讲了包含lapack和blas这回事">2.   Eigen，MKL，Armadillo的说明文档中都讲了包含LAPACK和BLAS这回事？</h2>
-
-<p>矩阵运算都涉及三种最基本的操作</p>
+    <p>计算<strong>Ax=b</strong>，<strong>A</strong>为稀疏矩阵。</p>
 
 <ul>
-  <li>
-    <p>Level 1 : 处理单一向量的线性运算以及两个向量的二元运算。</p>
-  </li>
-  <li>
-    <p>Level 2: 处理矩阵与向量的运算，同时也包含线性方程求解计算。</p>
-  </li>
-  <li>
-    <p>Level 3: 矩阵与矩阵运算。</p>
-  </li>
+  <li>Create left and right hand side</li>
+  <li>Solve linear system</li>
+  <li>factorize</li>
+  <li>solve</li>
+  <li>Write data to mtx file</li>
 </ul>
 
-<p>BLAS英文全称为Basic Linear Algebra Subprograms，是低级矩阵和矢量算术运算集合。LAPACK(Linear Algebra PACKage)即线性代数包，底层是BLAS，在此基础上定义了很多矩阵和向量高级运算的函数，比如矩阵分解（LU, QR, SVD），特征值求解等。所以BLAS和LAPACK看做是接口规范，其他的组织、个人和公司，就可以根据此规范，实现自己的科学计算库（见下图）。</p>
+<h3 id="1-create-left-and-right-hand-side">1. Create left and right hand side</h3>
 
-<p><img src="https://img-blog.csdn.net/20170906135422358" alt="lapack" /></p>
+<p>为了测试Eigen性能，可以利用C++内建的随机数生成器来创建稀疏矩阵</p>
 
-<p>Eigen、Armadillo自身实现了各种线性代数运算库外，同时还支持上述各种BLAS/LAPACK为基础的底层以加速运算。换句话说，搭了个算法的 架子，但是不管什么算法，它的内部可能涉及刚刚提到的矩阵x矩阵、矩阵x向量之类的运算，这些可以用BLAS/LAPACK算。他们除了自己写了线性运算库，还提供了其他矩阵运算库的接口（Pardiso，PaStiX，SuperLU，etc），所以只要编出这些lib，加进编译路径里，就能通过Eigen的接口调用他们内部的函数了。</p>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;random&gt;
+#include &lt;vector&gt;
+#include "Eigen/Eigen"
+</span>
+<span class="n">std</span><span class="o">::</span><span class="n">default_random_engine</span> <span class="n">gen</span><span class="p">;</span>     <span class="c1">// random number generator</span>
+<span class="n">std</span><span class="o">::</span><span class="n">uniform_real_distribution</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">dist</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">);</span>  <span class="c1">// type of distribution</span>
 
-<h2 id="3---既然有pardisosuperlu的库为什么要从eigenmkl用它">3.   既然有Pardiso，SuperLU的库，为什么要从Eigen，MKL用它？</h2>
+<span class="kt">int</span> <span class="n">rows</span><span class="o">=</span><span class="mi">100</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">cols</span><span class="o">=</span><span class="mi">100</span><span class="p">;</span>
 
-<p>以SuperLU为例，pdgssvx（用 parellel LU decomposition解double类型的Ax=b ）的函数有十几个参数要设置，而且传入的矩阵参数是以指针数组。在看Eigen的SuperLU接口，由于Eigen将各种矩阵运算库封装成统一格式， 我们可以直接用Eigen的稀疏矩阵作为参数，然后solver(b)就OK了。MKL，Armadillo也是类似，将这些接口进行了封装，我们不需要考虑矩阵的存储格式和各种难调的参数，这样大大减少了各个求解器接口调用的学习成本。MKL是Intel针对它的CPU系列开发的核心数学运算库，它提供了完整的BLAS和LAPACK实现，高度优化和线程，且内置并行处理机制。Eigen的很多矩阵运算可以用MKL加速（http://eigen.tuxfamily.org/dox-3.2/TopicUsingIntelMKL.html）。 用法如下：</p>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Triplet</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">tripletList</span><span class="p">;</span>
+<span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">rows</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">cols</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">)</span>
+    <span class="p">{</span>
+       <span class="k">auto</span> <span class="n">v_ij</span><span class="o">=</span><span class="n">dist</span><span class="p">(</span><span class="n">gen</span><span class="p">);</span>                         <span class="c1">//generate random number</span>
+       <span class="k">if</span><span class="p">(</span><span class="n">v_ij</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">)</span>
+       <span class="p">{</span>
+           <span class="n">tripletList</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">T</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">v_ij</span><span class="p">));</span>      <span class="c1">//if larger than treshold, insert it</span>
+       <span class="p">}</span>
+    <span class="p">}</span>
+<span class="n">SparseMatrixType</span> <span class="nf">mat</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span><span class="n">cols</span><span class="p">);</span>
+<span class="n">mat</span><span class="p">.</span><span class="n">setFromTriplets</span><span class="p">(</span><span class="n">tripletList</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">tripletList</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>   <span class="c1">//create the matrix</span>
+</code></pre></div></div>
 
-<p>·   在include Eigen头文件前，定义EIGEN_USE_MKL_ALL的宏</p>
+<p>这段代码人为构造了一个稀疏矩阵，我们还可以在<a href="https://math.nist.gov/MatrixMarket/">matrix market</a>下载工程计算里真正制造的矩阵，Eigen里也提供了接口来读取它的数据文件（<a href="http://math.nist.gov/MatrixMarket/formats.html">MatrixMarket Coordinate format</a>）。</p>
 
-<p>·   在编译程序时link MKL的库</p>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="k">namespace</span> <span class="n">Eigen</span>
 
-<p>·   Eigen自动将它的一些算法用MKL的routine实现</p>
+<span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+<span class="n">SparseMatrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span>  <span class="n">A</span><span class="p">;</span>
+<span class="n">string</span> <span class="n">filename</span> <span class="o">=</span> <span class="s">"your_file_name.mtk"</span><span class="p">;</span>
+<span class="n">loadMarket</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">filename</span><span class="p">);</span>       <span class="c1">// read mtk file and save data to A</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">Index</span> <span class="n">nnz</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">nonZeros</span><span class="p">();</span>   <span class="c1">// number of nonzeros</span>
+<span class="kt">double</span> <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">valuePtr</span><span class="p">();</span>
+<span class="kt">int</span> <span class="o">*</span><span class="n">asub</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">innerIndexPtr</span><span class="p">();</span>
+<span class="kt">int</span> <span class="o">*</span><span class="n">xa</span> <span class="o">=</span> <span class="n">A</span><span class="p">.</span><span class="n">outerIndexPtr</span><span class="p">();</span>
 
-<h2 id="4-哪个库最好">4. 哪个库最好？</h2>
+<span class="n">VectorXd</span> <span class="nf">X</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">rows</span><span class="p">());</span>
+<span class="n">X</span><span class="p">.</span><span class="n">setOnes</span><span class="p">();</span>   <span class="c1">// create one vector as exact solution</span>
+<span class="n">VectorXd</span> <span class="nf">B</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">rows</span><span class="p">());</span> 
+<span class="n">B</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">X</span><span class="p">;</span>    <span class="c1">// calculate right hand side</span>
 
-<p>世上不存在万能药。有的库是个超级大礼包，同事包含直接法和迭代法，有的只提供直接法或者迭代法。参考了各个商业软件和开源有限元软件的线性求解库后，我的总结是直接法一般用MUMPS、SuperLU，PaStix，Trillinos可以利用Metis的矩阵重排序功能加速运算。迭代法用PETCs、Trillinos。如果习惯了Matlab，只考虑接口易用性的话，那么可以选择Eigen和Armadillo。</p>
+</code></pre></div></div>
 
-<h2 id="5-迭代法那么多用哪个">5. 迭代法那么多用哪个？</h2>
+<p>A =</p>
 
-<p>不知道，大家可以参考这篇论文<a href="https://www.researchgate.net/publication/304771911_A_Comparison_of_Preconditioned_Krylov_Subspace_Methods_for_Nonsymmetric_Linear_Systems">A Comparison of Preconditioned Krylov Subspace Methods for Nonsymmetric Linear Systems</a>。总结下来就是</p>
+<table>
+  <thead>
+    <tr>
+      <th>0</th>
+      <th>3</th>
+      <th>0</th>
+      <th>0</th>
+      <th>0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>22</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>5</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>14</td>
+      <td>0</td>
+      <td>8</td>
+    </tr>
+  </tbody>
+</table>
 
-<blockquote>
-  <p>For large, moderately conditioned, non-saddle-point problems, use GMRES with Boomer- AMG as right preconditioner, with HMIS (or PMIS) coarsening and FF1 interpolation.</p>
+<table>
+  <thead>
+    <tr>
+      <th>Values:</th>
+      <th>22</th>
+      <th>7</th>
+      <th>3</th>
+      <th>5</th>
+      <th>14</th>
+      <th> </th>
+      <th>nnz</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>InnerIndices:</td>
+      <td>1</td>
+      <td>2</td>
+      <td>0</td>
+      <td>2</td>
+      <td>4</td>
+      <td> </td>
+      <td>nnz</td>
+    </tr>
+    <tr>
+      <td>OuterStarts</td>
+      <td>0</td>
+      <td>2</td>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>8</td>
+      <td>n+1</td>
+    </tr>
+  </tbody>
+</table>
 
-  <p>The easiest way to leverage the above recommendation is to use existing software packages. PETSc [5] is an excellent choice, since it supports both left and right preconditioning for GMRES and BiCGSTAB, and it supports BoomerAMG with various options.</p>
+<h3 id="2-solve-linear-system">2. Solve linear system</h3>
 
-  <p>Note that with an effective multigrid preconditioner, BiCGSTAB often converges almost as smoothly as GMRES. Therefore, assuming a multigrid precondition is available, BiCGSTAB can be used in place of GMRES, especially if right-preconditioned GMRES is unavailable but right-preconditioned BiCGSTAB is (such as in MATLAB).</p>
-</blockquote>
+<ul>
+  <li>矩阵重排序：Eigen内部提供了COLAMD, AMD，也可以Metis接口。</li>
+  <li>Preconditioner 设置：<a href="https://eigen.tuxfamily.org/dox/classEigen_1_1IdentityPreconditioner.html">IdentityPreconditioner</a>, <a href="https://eigen.tuxfamily.org/dox/classEigen_1_1DiagonalPreconditioner.html">DiagonalPreconditioner</a>, <a href="https://eigen.tuxfamily.org/dox/classEigen_1_1IncompleteLUT.html">IncompleteLUT</a>。默认Diagonal Preconditioner。</li>
+</ul>
 
-<p>GMRES+右预算子，BiCGSTAB也行，具体问题具体调参数。</p>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">BiCGSTAB</span><span class="o">&lt;</span><span class="n">SparseMatrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">IncompleteLUT</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&gt;</span> <span class="n">solver</span><span class="p">;</span>
+<span class="n">solver</span><span class="p">.</span><span class="n">compute</span><span class="p">(</span><span class="n">A</span><span class="p">);</span>  <span class="c1">// Iterative solver: setup a preconditioner. Direct solver: (1) reorder the nonzero elements of the matrix, (2) generally factorize it</span>
+<span class="n">solver</span><span class="p">.</span><span class="n">solve</span><span class="p">(</span><span class="n">B</span><span class="p">);</span>
+</code></pre></div></div>
 
-<p><strong>待完成：线性方程组求解算法的介绍</strong>…..</p>
+<h2 id="3-write-data-to-mtx-file">3. Write data to mtx file</h2>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;unsupported/Eigen/SparseExtra&gt;
+</span><span class="p">...</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">saveMarket</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="s">"filename.mtx"</span><span class="p">);</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">saveMarket</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="s">"filename_SPD.mtx"</span><span class="p">,</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Symmetric</span><span class="p">);</span> <span class="c1">// if A is symmetric-positive-definite</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">saveMarketVector</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="s">"filename_b.mtx"</span><span class="p">);</span>
+</code></pre></div></div>
+
 
 
 <ul class="taxonomy__index">
@@ -645,8 +743,8 @@
     
   <script>
     var disqus_config = function () {
-      this.page.url = "http://localhost:4000/open-source-libraries-of-linear-system-solvers/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/open-source-libraries-of-linear-system-solvers"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "http://localhost:4000/eigen-sparse-solver/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/eigen-sparse-solver"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');

@@ -1,0 +1,68 @@
+I" 	<h3 id="1-查看有没有安装gcc">1. 查看有没有安装gcc</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc -v
+</code></pre></div></div>
+
+<h3 id="2-用homebrew下载gcc">2. 用homebrew下载gcc</h3>
+
+<blockquote>
+  <p>brew search gcc     # 搜索可供下载的gcc版本</p>
+
+  <p>brew install gcc      # 默认下载最新版</p>
+</blockquote>
+
+<p>目前最新版是 gcc-9 (Homebrew GCC 9.2.0_3) 9.2.0。</p>
+
+<h3 id="3-添加路径至bash_profile">3. 添加路径至bash_profile</h3>
+
+<h5 id="查看当前使用的gcc的路径">查看当前使用的gcc的路径</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>whereis gcc
+</code></pre></div></div>
+
+<p>一般为/user/local/bin</p>
+
+<h4 id="vim中打开bash_profile">vim中打开bash_profile</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi ~/.bash_profile
+</code></pre></div></div>
+
+<h4 id="添加路径">添加路径</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export PATH="/usr/local/bin:$PATH"
+</code></pre></div></div>
+
+<h4 id="查看是否生效">查看是否生效</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo $PATH
+</code></pre></div></div>
+
+<p>如果能够在输出中看到刚刚添加的路径就说明添加成功了。</p>
+
+<h3 id="4-添加别名">4. 添加别名</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>alias gcc="gcc-9"
+alias cc="gcc-9"
+alias g++="g++-9"
+alias c++="c++-9"
+</code></pre></div></div>
+
+<p>否则系统使用的是clang而不是gcc。</p>
+
+<h3 id="5-查看gcc是否生效">5. 查看gcc是否生效</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc --version
+输出。。。。。
+gcc-9 (Homebrew GCC 9.2.0_3) 9.2.0
+Copyright (C) 2019 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc
+输出。。。。。
+gcc-9: fatal error: no input files
+compilation terminated.
+</code></pre></div></div>
+
+:ET

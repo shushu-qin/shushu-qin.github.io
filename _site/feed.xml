@@ -1,8 +1,472 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-01-11T22:22:33+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Computational Mechanics Blog</title><subtitle>Computational mechanics</subtitle><author><name>Shushu Qin</name></author><entry><title type="html">History of Finite Element Methods</title><link href="http://localhost:4000/history-of-finite-element-methods/" rel="alternate" type="text/html" title="History of Finite Element Methods" /><published>2020-01-10T00:00:00+08:00</published><updated>2020-01-10T00:00:00+08:00</updated><id>http://localhost:4000/history-of-finite-element-methods</id><content type="html" xml:base="http://localhost:4000/history-of-finite-element-methods/">&lt;h3 id=&quot;有限元的发明者&quot;&gt;有限元的发明者&lt;/h3&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-02-17T20:34:31+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Computational Mechanics Blog</title><subtitle>Computational mechanics</subtitle><author><name>Shushu Qin</name></author><entry><title type="html">Makefile入门1</title><link href="http://localhost:4000/Makefile-Tutorial1/" rel="alternate" type="text/html" title="Makefile入门1" /><published>2020-02-17T00:00:00+08:00</published><updated>2020-02-17T00:00:00+08:00</updated><id>http://localhost:4000/Makefile-Tutorial1</id><content type="html" xml:base="http://localhost:4000/Makefile-Tutorial1/">&lt;h3 id=&quot;1-什么是makefile&quot;&gt;1. 什么是Makefile&lt;/h3&gt;
+
+&lt;p&gt;大多数的Winodws的程序员不需要深入了解自动化编译流程，因为Windows的IDE(Integrated Development Environment)已经做了相关的工作,比如VC，VB等。而Linux下没有这样的IDE，通常需要程序员做用脚本自行书写。这个脚本就是Makefile，在其中可以指定需要编译哪些文件，哪些先编译，哪些后编译，哪些需要重新编译，最终需要生成怎么样的应用程序。make是一种命令，它用来解释Makefile脚本，并根据脚本中的指定内容，进行操作。当我们在终端输入&lt;code class=&quot;highlighter-rouge&quot;&gt;make&lt;/code&gt;时，&lt;code class=&quot;highlighter-rouge&quot;&gt;make&lt;/code&gt;指令会自动寻找当前文路径下叫做Makefile（或makefile）的文件，并按照里面所定义的编译规则来编译源代码。&lt;/p&gt;
+
+&lt;h3 id=&quot;2-hello-world-makefile&quot;&gt;2. Hello World, Makefile!&lt;/h3&gt;
+
+&lt;p&gt;假设我们有一个&lt;code class=&quot;highlighter-rouge&quot;&gt;hello_world.cpp&lt;/code&gt;的文件&lt;/p&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;iostream&amp;gt;
+&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hello world!&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;如果直接通过&lt;code class=&quot;highlighter-rouge&quot;&gt;g++&lt;/code&gt;编译，我们可以cd到当前文件路径，在终端输入&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ g++ hello_world.cpp -o hello_world
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;即可编译成&lt;code class=&quot;highlighter-rouge&quot;&gt;hello_world&lt;/code&gt;可执行文件。&lt;/p&gt;
+
+&lt;p&gt;如果g++命令很长，为了避免每次都要敲那么多文字，我们可以把这些指令写进Makefile里&lt;/p&gt;
+
+&lt;div class=&quot;language-makefile highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 我是注释
+&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CC&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; g++  &lt;span class=&quot;c&quot;&gt;# CC，SRCS,EXEC为变量，都是字符串，使用时会完全被替换&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;SRCS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; hello_world.cpp
+&lt;span class=&quot;nv&quot;&gt;EXEC&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; hello_world
+
+&lt;span class=&quot;nl&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+	&lt;span class=&quot;nv&quot;&gt;$(CC)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$(SRCS)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$(EXEC)&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;# makefile命令部份，变量在被引用时需要加上&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;或者&lt;span class=&quot;k&quot;&gt;${}&lt;/span&gt;用以dereference
+	
+&lt;span class=&quot;nl&quot;&gt;clean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+	&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.o
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;编写完后，保存，在当前目录下执行make命令，生成可执行程序hello_world。&lt;/p&gt;
+
+&lt;h3 id=&quot;3-makefile的组成&quot;&gt;3. Makefile的组成&lt;/h3&gt;
+
+&lt;p&gt;Makefile由以下五个部分组成&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;显示规则&lt;/li&gt;
+  &lt;li&gt;隐式规则&lt;/li&gt;
+  &lt;li&gt;变量的定义&lt;/li&gt;
+  &lt;li&gt;文件指示&lt;/li&gt;
+  &lt;li&gt;注释&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面具体介绍一下显示规则&lt;/p&gt;
+
+&lt;h3 id=&quot;4-makefile的显示规则&quot;&gt;4. Makefile的显示规则&lt;/h3&gt;
+
+&lt;p&gt;可以归纳为一下形式&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;target&amp;gt;:&amp;lt;depend&amp;gt;
+	command1
+	command2
+	……
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;target是一个目标文件，可以是可执行文件或.o文件，也可以是执行动作（如上面的all和clean）。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;depend目标的依赖，目标若需要成立，必须有依赖。一个target可以拥有多个depend 。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;command是make执行动作，一个目标依赖关系中可以包含多个命令，每个command前必须有个Tab键。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;注：若target缺少depend ，那么command会直接被执行。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;5-makefile的工作原理&quot;&gt;5. Makefile的工作原理&lt;/h3&gt;
+
+&lt;p&gt;以这个Makefile文件为例&lt;/p&gt;
+
+&lt;div class=&quot;language-makefile highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nl&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;B	&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;A&quot;&lt;/span&gt;
+&lt;span class=&quot;nl&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;C	&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;B&quot;&lt;/span&gt;
+&lt;span class=&quot;nl&quot;&gt;C&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;D&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;C&quot;&lt;/span&gt;
+&lt;span class=&quot;nl&quot;&gt;D&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;	
+	&lt;span class=&quot;p&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;D&quot;&lt;/span&gt;
+&lt;span class=&quot;nl&quot;&gt;G&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;	
+	&lt;span class=&quot;p&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;G&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;若执行&lt;code class=&quot;highlighter-rouge&quot;&gt;make A&lt;/code&gt;，输出&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;D
+C
+B
+A
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;原理：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1. 当执行make A的时候，make程序从当前目录读入makefile，找到A命令。
+2. 发现A depends on B，先执行B指令，B depends on C....以此类推，最终定位到D
+3. 执行D: @echo &quot;D&quot; -&amp;gt; 执行C -&amp;gt; ... -&amp;gt; 执行A
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;若执行&lt;code class=&quot;highlighter-rouge&quot;&gt;make D&lt;/code&gt;，输出&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;D
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;原理：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1. 当执行make D的时候，make程序从当前目录读入makefile，找到D命令。
+2. 发现D没有depend，直接执行@echo &quot;D&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Shushu Qin</name></author><category term="linux" /><summary type="html">1. 什么是Makefile</summary></entry><entry><title type="html">MPI安装及编译</title><link href="http://localhost:4000/MPI-Hello-World/" rel="alternate" type="text/html" title="MPI安装及编译" /><published>2020-02-13T00:00:00+08:00</published><updated>2020-02-13T00:00:00+08:00</updated><id>http://localhost:4000/MPI-Hello-World</id><content type="html" xml:base="http://localhost:4000/MPI-Hello-World/">&lt;h3 id=&quot;install-mpi&quot;&gt;Install MPI&lt;/h3&gt;
+
+&lt;p&gt;这里我们采用MPICH的MPI实现，下载官网http://www.mpich.org/downloads/。Mac系统可以直接通过homebrew安装MPI&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ brew install mpich
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;程序基本结构&quot;&gt;程序基本结构&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;进入并行环境&lt;code class=&quot;highlighter-rouge&quot;&gt;MPI_Init&lt;/code&gt;：让系统知道此程序是并行程序，启动并行计算环境。&lt;/li&gt;
+  &lt;li&gt;主体并行程序：实现并行的代码。&lt;/li&gt;
+  &lt;li&gt;退出并行环境&lt;code class=&quot;highlighter-rouge&quot;&gt;MPI_Finalize&lt;/code&gt;：通知系统，从这里开始，不再使用并行环境。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;编译mpi-hello-world小程序&quot;&gt;编译MPI Hello world小程序&lt;/h3&gt;
+
+&lt;p&gt;所有的MPI函数都是以&lt;code class=&quot;highlighter-rouge&quot;&gt;MPI_&lt;/code&gt;前缀开头，接 MPI_ 之后的第一个字母大写, 其余全部为小写字母。函数调用结束后会返回int 类型的错误信息码，当 MPI 程序不出错的时候返回&lt;code class=&quot;highlighter-rouge&quot;&gt;MPI_SUCCESS&lt;/code&gt;。&lt;/p&gt;
+
+&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/* MPI_HelloWorld.c */&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;mpi.h&amp;gt;  // 引入MPI头文件
+&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[])&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;    
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;info&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MPI_Init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 初始化MPI&lt;/span&gt;
+  
+    &lt;span class=&quot;c1&quot;&gt;// 得到进程数量&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;world_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;MPI_Comm_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MPI_COMM_WORLD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;world_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  
+	  &lt;span class=&quot;c1&quot;&gt;// 得到当前进程的秩&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;world_rank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;MPI_Comm_rank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MPI_COMM_WORLD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;world_rank&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  
+    &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hello world!&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    
+    &lt;span class=&quot;n&quot;&gt;info&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MPI_Initialized&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 查看MPI是否被初始化&lt;/span&gt;
+    
+    &lt;span class=&quot;n&quot;&gt;info&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MPI_Finalize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;//&lt;/span&gt;
+  
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;mpicc&lt;/code&gt;命令编译c代码&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ mpicc -g -o MPI_HelloWorld MPI_HelloWorld.c
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;运行需要使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;mpiexec&lt;/code&gt; 命令&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ mpiexec -np 2 MPI_HelloWorld
+Hello world!
+Hello world!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Shushu Qin</name></author><category term="HPC" /><category term="MPI" /><summary type="html">Install MPI</summary></entry><entry><title type="html">GCC教程1</title><link href="http://localhost:4000/gcc-tutorial1/" rel="alternate" type="text/html" title="GCC教程1" /><published>2020-02-12T00:00:00+08:00</published><updated>2020-02-12T00:00:00+08:00</updated><id>http://localhost:4000/gcc-tutorial1</id><content type="html" xml:base="http://localhost:4000/gcc-tutorial1/">&lt;h3 id=&quot;1-简单编译&quot;&gt;1. 简单编译&lt;/h3&gt;
+
+&lt;p&gt;示例程序&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//test.c
+#include &amp;lt;stdio.h&amp;gt;
+int main(void)
+{
+    printf(&quot;Hello World!\n&quot;);
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;cd到当前目录，执行&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ gcc test.c
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;会在当前文件夹中生成a.out文件，这就是最终生成的可执行文件。&lt;/p&gt;
+
+&lt;p&gt;如果不想使用默认的文件名，那么可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;-o&lt;/code&gt;选项来自定义文件名，例如&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ gcc test.c -o test.out
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;运行可执行文件&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ ./test.out 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;2-更多设置&quot;&gt;2. 更多设置&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gcc -Wall -g test.c -o test.out
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-Wall&lt;/code&gt; 代表编译器在编译过程中会输出警告信息（Warning），这类信息虽然不是错误，不影响编译，但是很可能是程序 bug 的源头，也有助于你寻找代码中的错误，规范代码格式。建议每次编译时都加上 -Wall 参数。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-g&lt;/code&gt; 代表编译器会收集调试（debug）信息，这样如果你的程序运行出错，就可以通过 gdb 或者 lldb 等工具进行逐行调试，方便找出错误原因。如果你不是百分之百确定你的程序毫无问题，建议加上 &lt;code class=&quot;highlighter-rouge&quot;&gt;-g&lt;/code&gt; 参数。这样 debug 的时候会方便很多。&lt;/p&gt;</content><author><name>Shushu Qin</name></author><category term="linux" /><summary type="html">1. 简单编译</summary></entry><entry><title type="html">Basic Steps of Using Eigen to Solve Sparse System</title><link href="http://localhost:4000/eigen-sparse-solver/" rel="alternate" type="text/html" title="Basic Steps of Using Eigen to Solve Sparse System" /><published>2020-01-13T00:00:00+08:00</published><updated>2020-01-13T00:00:00+08:00</updated><id>http://localhost:4000/eigen-sparse-solver</id><content type="html" xml:base="http://localhost:4000/eigen-sparse-solver/">&lt;p&gt;计算&lt;strong&gt;Ax=b&lt;/strong&gt;，&lt;strong&gt;A&lt;/strong&gt;为稀疏矩阵。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create left and right hand side&lt;/li&gt;
+  &lt;li&gt;Solve linear system&lt;/li&gt;
+  &lt;li&gt;factorize&lt;/li&gt;
+  &lt;li&gt;solve&lt;/li&gt;
+  &lt;li&gt;Write data to mtx file&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;1-create-left-and-right-hand-side&quot;&gt;1. Create left and right hand side&lt;/h3&gt;
+
+&lt;p&gt;为了测试Eigen性能，可以利用C++内建的随机数生成器来创建稀疏矩阵&lt;/p&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;random&amp;gt;
+#include &amp;lt;vector&amp;gt;
+#include &quot;Eigen/Eigen&quot;
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;default_random_engine&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;// random number generator&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;uniform_real_distribution&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// type of distribution&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rows&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cols&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Eigen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Triplet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tripletList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rows&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cols&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;auto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v_ij&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;                         &lt;span class=&quot;c1&quot;&gt;//generate random number&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v_ij&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+       &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+           &lt;span class=&quot;n&quot;&gt;tripletList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v_ij&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;//if larger than treshold, insert it&lt;/span&gt;
+       &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SparseMatrixType&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;mat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rows&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cols&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;setFromTriplets&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tripletList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tripletList&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;//create the matrix&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这段代码人为构造了一个稀疏矩阵，我们还可以在&lt;a href=&quot;https://math.nist.gov/MatrixMarket/&quot;&gt;matrix market&lt;/a&gt;下载工程计算里真正制造的矩阵，Eigen里也提供了接口来读取它的数据文件（&lt;a href=&quot;http://math.nist.gov/MatrixMarket/formats.html&quot;&gt;MatrixMarket Coordinate format&lt;/a&gt;）。&lt;/p&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Eigen&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SparseMatrix&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;your_file_name.mtk&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;loadMarket&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;// read mtk file and save data to A&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Eigen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Index&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nnz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nonZeros&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// number of nonzeros&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;valuePtr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asub&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;innerIndexPtr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xa&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;outerIndexPtr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;VectorXd&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rows&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;setOnes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// create one vector as exact solution&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;VectorXd&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rows&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// calculate right hand side&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;A =&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;th&gt;0&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;22&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;17&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;7&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;14&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Values:&lt;/th&gt;
+      &lt;th&gt;22&lt;/th&gt;
+      &lt;th&gt;7&lt;/th&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;th&gt;5&lt;/th&gt;
+      &lt;th&gt;14&lt;/th&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th&gt;nnz&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;InnerIndices:&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;nnz&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;OuterStarts&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+      &lt;td&gt;6&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;n+1&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;2-solve-linear-system&quot;&gt;2. Solve linear system&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;矩阵重排序：Eigen内部提供了COLAMD, AMD，也可以Metis接口。&lt;/li&gt;
+  &lt;li&gt;Preconditioner 设置：&lt;a href=&quot;https://eigen.tuxfamily.org/dox/classEigen_1_1IdentityPreconditioner.html&quot;&gt;IdentityPreconditioner&lt;/a&gt;, &lt;a href=&quot;https://eigen.tuxfamily.org/dox/classEigen_1_1DiagonalPreconditioner.html&quot;&gt;DiagonalPreconditioner&lt;/a&gt;, &lt;a href=&quot;https://eigen.tuxfamily.org/dox/classEigen_1_1IncompleteLUT.html&quot;&gt;IncompleteLUT&lt;/a&gt;。默认Diagonal Preconditioner。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;BiCGSTAB&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SparseMatrix&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IncompleteLUT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;solver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;solver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;compute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// Iterative solver: setup a preconditioner. Direct solver: (1) reorder the nonzero elements of the matrix, (2) generally factorize it&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;solver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;solve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;3-write-data-to-mtx-file&quot;&gt;3. Write data to mtx file&lt;/h2&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;unsupported/Eigen/SparseExtra&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Eigen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;saveMarket&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;filename.mtx&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Eigen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;saveMarket&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;filename_SPD.mtx&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Eigen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Symmetric&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// if A is symmetric-positive-definite&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Eigen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;saveMarketVector&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;filename_b.mtx&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Shushu Qin</name></author><category term="C/C++" /><category term="HPC" /><category term="Matrix Computations" /><summary type="html">计算Ax=b，A为稀疏矩阵。</summary></entry><entry><title type="html">How to install gcc on mac</title><link href="http://localhost:4000/how-to-install-gcc-on-mac/" rel="alternate" type="text/html" title="How to install gcc on mac" /><published>2020-01-12T00:00:00+08:00</published><updated>2020-01-12T00:00:00+08:00</updated><id>http://localhost:4000/how-to-install-gcc-on-mac</id><content type="html" xml:base="http://localhost:4000/how-to-install-gcc-on-mac/">&lt;h3 id=&quot;1-查看有没有安装gcc&quot;&gt;1. 查看有没有安装gcc&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gcc -v
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;2-用homebrew下载gcc&quot;&gt;2. 用homebrew下载gcc&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;brew search gcc     # 搜索可供下载的gcc版本&lt;/p&gt;
+
+  &lt;p&gt;brew install gcc      # 默认下载最新版&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;目前最新版是 gcc-9 (Homebrew GCC 9.2.0_3) 9.2.0。&lt;/p&gt;
+
+&lt;h3 id=&quot;3-添加路径至bash_profile&quot;&gt;3. 添加路径至bash_profile&lt;/h3&gt;
+
+&lt;h5 id=&quot;查看当前使用的gcc的路径&quot;&gt;查看当前使用的gcc的路径&lt;/h5&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;whereis gcc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;一般为/user/local/bin&lt;/p&gt;
+
+&lt;h4 id=&quot;vim中打开bash_profile&quot;&gt;vim中打开bash_profile&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vi ~/.bash_profile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;添加路径&quot;&gt;添加路径&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export PATH=&quot;/usr/local/bin:$PATH&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;查看是否生效&quot;&gt;查看是否生效&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;echo $PATH
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;如果能够在输出中看到刚刚添加的路径就说明添加成功了。&lt;/p&gt;
+
+&lt;h3 id=&quot;4-添加别名&quot;&gt;4. 添加别名&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;alias gcc=&quot;gcc-9&quot;
+alias cc=&quot;gcc-9&quot;
+alias g++=&quot;g++-9&quot;
+alias c++=&quot;c++-9&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;否则系统使用的是clang而不是gcc。&lt;/p&gt;
+
+&lt;h3 id=&quot;5-查看gcc是否生效&quot;&gt;5. 查看gcc是否生效&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gcc --version
+输出。。。。。
+gcc-9 (Homebrew GCC 9.2.0_3) 9.2.0
+Copyright (C) 2019 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gcc
+输出。。。。。
+gcc-9: fatal error: no input files
+compilation terminated.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Shushu Qin</name></author><category term="mac" /><summary type="html">1. 查看有没有安装gcc</summary></entry><entry><title type="html">Mac 终端常用指令</title><link href="http://localhost:4000/mac-tips/" rel="alternate" type="text/html" title="Mac 终端常用指令" /><published>2020-01-10T00:00:00+08:00</published><updated>2020-01-10T00:00:00+08:00</updated><id>http://localhost:4000/mac-tips</id><content type="html" xml:base="http://localhost:4000/mac-tips/">&lt;h4 id=&quot;1-关于bash_profile&quot;&gt;1. 关于.bash_profile&lt;/h4&gt;
+
+&lt;h5 id=&quot;打开bash_profile修改全局变量&quot;&gt;打开bash_profile，修改全局变量&lt;/h5&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;open -e ~/.bash_profile&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;.bash_profile 是一个隐藏文件，主要是用来配置bash shell的。&lt;/p&gt;
+
+&lt;p&gt;~代表home目录，即每个用户登录系统后所在的目录，通常名称为自己的用户名。&lt;/p&gt;
+
+&lt;h5 id=&quot;vim中修改bash_profile&quot;&gt;vim中修改bash_profile&lt;/h5&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;vi ~/.bash_profile&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h5 id=&quot;让配置文件在修改后立即生效&quot;&gt;让配置文件在修改后立即生效&lt;/h5&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source ~/.bash_profile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;2-mac系统如何显示隐藏文件&quot;&gt;2. Mac系统如何显示隐藏文件？&lt;/h4&gt;
+
+&lt;p&gt;Command+Shift+. 可以显示隐藏文件、文件夹，再按一次，恢复隐藏；
+finder下使用Command+Shift+G 可以前往任何文件夹，包括隐藏文件夹。(摘自&lt;a href=&quot;https://www.zhihu.com/question/24635640&quot;&gt;知乎&lt;/a&gt;)&lt;/p&gt;</content><author><name>Shushu Qin</name></author><category term="mac" /><category term="linux" /><summary type="html">1. 关于.bash_profile</summary></entry><entry><title type="html">History of Finite Element Methods</title><link href="http://localhost:4000/history-of-finite-element-methods/" rel="alternate" type="text/html" title="History of Finite Element Methods" /><published>2020-01-10T00:00:00+08:00</published><updated>2020-01-10T00:00:00+08:00</updated><id>http://localhost:4000/history-of-finite-element-methods</id><content type="html" xml:base="http://localhost:4000/history-of-finite-element-methods/">&lt;p&gt;了解一个方法是怎么产生的可能比学会这个方法更重要，所以闲来无事，总结一下有限元的发展史。&lt;/p&gt;
+
+&lt;h3 id=&quot;有限元的发明者&quot;&gt;有限元的发明者&lt;/h3&gt;
+
 &lt;p&gt;并不是只有一个人。但是如果说是通用有限元方法的创始人，我们可以说是Boeing公司的一个结构工程师Jon Turner。他总结并且完善了直接刚度法Direct Stiffness Method，
 我们接下来也会讲到这个方法，它是有限元的雏形。当时其他航空公司都是用Force Method，他说服了波音投入资源来开发直接刚度法。1952-1953年期间，他监督了第一个基于连续介质的有限元的开发。当然，这期间还有其他工程师投入到有限元法的发展，但是所有这些人都来自于航空领域。为什么呢？这不是巧合。我们先前提到了，有限元的产生取决于三个关键因素，其中之一就是计算机。而当时（1950s）只有大的航空公司才有能力支付大型计算主机。&lt;/p&gt;
 
-&lt;h3 id=&quot;有限元呢的推广者&quot;&gt;有限元呢的推广者&lt;/h3&gt;
+&lt;h3 id=&quot;有限元的推广者&quot;&gt;有限元的推广者&lt;/h3&gt;
 
 &lt;p&gt;主要是四位学者：&lt;/p&gt;
 
@@ -32,7 +496,7 @@
   &lt;p&gt;[1] Carlos A. Felippa(2004), “Introduction to Finite Element Methods”   &lt;br /&gt;
 [2] MJ Turner. “Stiffness and deflection analysis of complex structures.” &lt;em&gt;journal of the Aeronautical Sciences&lt;/em&gt; 23.9 (1956): 805-823    &lt;br /&gt;
 [3] Strang, Gilbert, and George J. Fix. &lt;em&gt;An analysis of the finite element method&lt;/em&gt;. Vol. 212. Englewood Cliffs, NJ: Prentice-hall, 1973.&lt;/p&gt;
-&lt;/blockquote&gt;</content><author><name>Shushu Qin</name></author><category term="fem" /><summary type="html">有限元的发明者 并不是只有一个人。但是如果说是通用有限元方法的创始人，我们可以说是Boeing公司的一个结构工程师Jon Turner。他总结并且完善了直接刚度法Direct Stiffness Method， 我们接下来也会讲到这个方法，它是有限元的雏形。当时其他航空公司都是用Force Method，他说服了波音投入资源来开发直接刚度法。1952-1953年期间，他监督了第一个基于连续介质的有限元的开发。当然，这期间还有其他工程师投入到有限元法的发展，但是所有这些人都来自于航空领域。为什么呢？这不是巧合。我们先前提到了，有限元的产生取决于三个关键因素，其中之一就是计算机。而当时（1950s）只有大的航空公司才有能力支付大型计算主机。</summary></entry><entry><title type="html">Open source libraries of Linear system solvers</title><link href="http://localhost:4000/open-source-libraries-of-linear-system-solvers/" rel="alternate" type="text/html" title="Open source libraries of Linear system solvers" /><published>2020-01-10T00:00:00+08:00</published><updated>2020-01-10T00:00:00+08:00</updated><id>http://localhost:4000/open-source-libraries-of-linear-system-solvers</id><content type="html" xml:base="http://localhost:4000/open-source-libraries-of-linear-system-solvers/">&lt;p&gt;在有限元程序计算中，最终我们会得到Ax=b这样一个线性方程组，在MATLAB里，一个最简单的求解线性方程组问题的方法就是x=A\b。最近在做有限元软件开源矩阵求解器的集成。
+&lt;/blockquote&gt;</content><author><name>Shushu Qin</name></author><category term="fem" /><summary type="html">了解一个方法是怎么产生的可能比学会这个方法更重要，所以闲来无事，总结一下有限元的发展史。</summary></entry><entry><title type="html">Open source libraries of Linear system solvers</title><link href="http://localhost:4000/open-source-libraries-of-linear-system-solvers/" rel="alternate" type="text/html" title="Open source libraries of Linear system solvers" /><published>2020-01-10T00:00:00+08:00</published><updated>2020-01-10T00:00:00+08:00</updated><id>http://localhost:4000/open-source-libraries-of-linear-system-solvers</id><content type="html" xml:base="http://localhost:4000/open-source-libraries-of-linear-system-solvers/">&lt;p&gt;在有限元程序计算中，最终我们会得到Ax=b这样一个线性方程组，在MATLAB里，一个最简单的求解线性方程组问题的方法就是x=A\b。最近在做有限元软件开源矩阵求解器的集成。
 说到矩阵运算，最简单的方法就是打开MATLAB，输入 x=A\b，然后就是等结果了，而其他迭代法求解也有很多易用的接口。被MATLAB宠坏的我，在转到其他开源的矩阵求解库的过程中也是经历了各种曲折，在此写个总结，分享一下我对数值计算中线性方程组求解的理解。&lt;/p&gt;
 
 &lt;p&gt;一开始接到有限元稀疏矩阵求解的项目时，我无数遍问自己为什么不用MATLAB？但是企业不是学校，开发软件是要盈利的，MATLAB的license太贵了，而且并不开源，想要开发一个全自主产权的软件，这条路显然是走不通的。在这种情况下，我尝试寻找可用的开源软件，遇到了一堆名词，LAPACK，BLAS，MKL，Eigen，Pardiso，Armadillo，SuperLU，MUMPS，etc。在&lt;a href=&quot;http://www.netlib.org/utk/people/JackDongarra/la-sw.html&quot;&gt;这个网址&lt;/a&gt;总结了各个线性代数求解库的特性和适用范围，大家可以参考一下。&lt;/p&gt;

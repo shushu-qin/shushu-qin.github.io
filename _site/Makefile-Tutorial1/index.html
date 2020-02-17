@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Open source libraries of Linear system solvers - Computational Mechanics Blog</title>
-<meta name="description" content="在有限元程序计算中，最终我们会得到Ax=b这样一个线性方程组，在MATLAB里，一个最简单的求解线性方程组问题的方法就是x=A\b。最近在做有限元软件开源矩阵求解器的集成。说到矩阵运算，最简单的方法就是打开MATLAB，输入 x=A\b，然后就是等结果了，而其他迭代法求解也有很多易用的接口。被MATLAB宠坏的我，在转到其他开源的矩阵求解库的过程中也是经历了各种曲折，在此写个总结，分享一下我对数值计算中线性方程组求解的理解。">
+<!-- begin _includes/seo.html --><title>Makefile入门1 - Computational Mechanics Blog</title>
+<meta name="description" content="1. 什么是Makefile">
 
 
   <meta name="author" content="Shushu Qin">
@@ -19,30 +19,30 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Computational Mechanics Blog">
-<meta property="og:title" content="Open source libraries of Linear system solvers">
-<meta property="og:url" content="http://localhost:4000/open-source-libraries-of-linear-system-solvers/">
+<meta property="og:title" content="Makefile入门1">
+<meta property="og:url" content="http://localhost:4000/Makefile-Tutorial1/">
 
 
-  <meta property="og:description" content="在有限元程序计算中，最终我们会得到Ax=b这样一个线性方程组，在MATLAB里，一个最简单的求解线性方程组问题的方法就是x=A\b。最近在做有限元软件开源矩阵求解器的集成。说到矩阵运算，最简单的方法就是打开MATLAB，输入 x=A\b，然后就是等结果了，而其他迭代法求解也有很多易用的接口。被MATLAB宠坏的我，在转到其他开源的矩阵求解库的过程中也是经历了各种曲折，在此写个总结，分享一下我对数值计算中线性方程组求解的理解。">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-01-10T00:00:00+08:00">
+  <meta property="og:description" content="1. 什么是Makefile">
 
 
 
 
 
-  
+
+
+  <meta property="article:published_time" content="2020-02-17T00:00:00+08:00">
+
+
+
+
 
   
 
+  
 
-<link rel="canonical" href="http://localhost:4000/open-source-libraries-of-linear-system-solvers/">
+
+<link rel="canonical" href="http://localhost:4000/Makefile-Tutorial1/">
 
 
 
@@ -274,70 +274,129 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Open source libraries of Linear system solvers</h1>
+      <h1 id="page-title" class="page__title">Makefile入门1</h1>
     
-    <p>在有限元程序计算中，最终我们会得到Ax=b这样一个线性方程组，在MATLAB里，一个最简单的求解线性方程组问题的方法就是x=A\b。最近在做有限元软件开源矩阵求解器的集成。
-说到矩阵运算，最简单的方法就是打开MATLAB，输入 x=A\b，然后就是等结果了，而其他迭代法求解也有很多易用的接口。被MATLAB宠坏的我，在转到其他开源的矩阵求解库的过程中也是经历了各种曲折，在此写个总结，分享一下我对数值计算中线性方程组求解的理解。</p>
+    <h3 id="1-什么是makefile">1. 什么是Makefile</h3>
 
-<p>一开始接到有限元稀疏矩阵求解的项目时，我无数遍问自己为什么不用MATLAB？但是企业不是学校，开发软件是要盈利的，MATLAB的license太贵了，而且并不开源，想要开发一个全自主产权的软件，这条路显然是走不通的。在这种情况下，我尝试寻找可用的开源软件，遇到了一堆名词，LAPACK，BLAS，MKL，Eigen，Pardiso，Armadillo，SuperLU，MUMPS，etc。在<a href="http://www.netlib.org/utk/people/JackDongarra/la-sw.html">这个网址</a>总结了各个线性代数求解库的特性和适用范围，大家可以参考一下。</p>
+<p>大多数的Winodws的程序员不需要深入了解自动化编译流程，因为Windows的IDE(Integrated Development Environment)已经做了相关的工作,比如VC，VB等。而Linux下没有这样的IDE，通常需要程序员做用脚本自行书写。这个脚本就是Makefile，在其中可以指定需要编译哪些文件，哪些先编译，哪些后编译，哪些需要重新编译，最终需要生成怎么样的应用程序。make是一种命令，它用来解释Makefile脚本，并根据脚本中的指定内容，进行操作。当我们在终端输入<code class="highlighter-rouge">make</code>时，<code class="highlighter-rouge">make</code>指令会自动寻找当前文路径下叫做Makefile（或makefile）的文件，并按照里面所定义的编译规则来编译源代码。</p>
 
-<p>我又无数遍问自己。。。。</p>
+<h3 id="2-hello-world-makefile">2. Hello World, Makefile!</h3>
 
-<h2 id="1解线性方程组不就是lu分解或者是迭代法吗为什么要用这些软件不直接自己写一个">1.解线性方程组不就是LU分解或者是迭代法吗，为什么要用这些软件，不直接自己写一个？</h2>
+<p>假设我们有一个<code class="highlighter-rouge">hello_world.cpp</code>的文件</p>
 
-<p>看了Davis讲稀疏矩阵直接求解法的第一课之后（看第二课时我就开始怀疑自己的智商了），我开始明白从书上写的pseudocode到真正的代码实现之间，有很长的路要走。虽然LU分解基于Gaussian Elimination， 但要做到内存占用小，代码效率高，甚至并行化，将书上的算法照搬写成代码肯定会在大型矩阵运算（一百万以上自由度）时捉襟见肘。所以，不能重复造轮子，尤其是劣质的轮子。</p>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Hello world!</span><span class="se">\n</span><span class="s">"</span> <span class="p">;</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
-<h2 id="2---eigenmklarmadillo的说明文档中都讲了包含lapack和blas这回事">2.   Eigen，MKL，Armadillo的说明文档中都讲了包含LAPACK和BLAS这回事？</h2>
+<p>如果直接通过<code class="highlighter-rouge">g++</code>编译，我们可以cd到当前文件路径，在终端输入</p>
 
-<p>矩阵运算都涉及三种最基本的操作</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ g++ hello_world.cpp -o hello_world
+</code></pre></div></div>
+
+<p>即可编译成<code class="highlighter-rouge">hello_world</code>可执行文件。</p>
+
+<p>如果g++命令很长，为了避免每次都要敲那么多文字，我们可以把这些指令写进Makefile里</p>
+
+<div class="language-makefile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 我是注释
+</span><span class="nv">CC</span>   <span class="o">=</span> g++  <span class="c"># CC，SRCS,EXEC为变量，都是字符串，使用时会完全被替换</span>
+<span class="nv">SRCS</span> <span class="o">=</span> hello_world.cpp
+<span class="nv">EXEC</span> <span class="o">=</span> hello_world
+
+<span class="nl">all</span><span class="o">:</span>
+	<span class="nv">$(CC)</span> <span class="nv">$(SRCS)</span> <span class="nt">-o</span> <span class="nv">$(EXEC)</span>  <span class="c"># makefile命令部份，变量在被引用时需要加上</span><span class="err">$</span><span class="o">()</span>或者<span class="k">${}</span>用以dereference
+	
+<span class="nl">clean</span><span class="o">:</span>
+	<span class="nb">rm</span> <span class="nt">-rf</span> <span class="k">*</span>.o
+</code></pre></div></div>
+
+<p>编写完后，保存，在当前目录下执行make命令，生成可执行程序hello_world。</p>
+
+<h3 id="3-makefile的组成">3. Makefile的组成</h3>
+
+<p>Makefile由以下五个部分组成</p>
+
+<ul>
+  <li>显示规则</li>
+  <li>隐式规则</li>
+  <li>变量的定义</li>
+  <li>文件指示</li>
+  <li>注释</li>
+</ul>
+
+<p>下面具体介绍一下显示规则</p>
+
+<h3 id="4-makefile的显示规则">4. Makefile的显示规则</h3>
+
+<p>可以归纳为一下形式</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;target&gt;:&lt;depend&gt;
+	command1
+	command2
+	……
+</code></pre></div></div>
 
 <ul>
   <li>
-    <p>Level 1 : 处理单一向量的线性运算以及两个向量的二元运算。</p>
+    <p>target是一个目标文件，可以是可执行文件或.o文件，也可以是执行动作（如上面的all和clean）。</p>
   </li>
   <li>
-    <p>Level 2: 处理矩阵与向量的运算，同时也包含线性方程求解计算。</p>
+    <p>depend目标的依赖，目标若需要成立，必须有依赖。一个target可以拥有多个depend 。</p>
   </li>
   <li>
-    <p>Level 3: 矩阵与矩阵运算。</p>
+    <p>command是make执行动作，一个目标依赖关系中可以包含多个命令，每个command前必须有个Tab键。</p>
+  </li>
+  <li>
+    <p>注：若target缺少depend ，那么command会直接被执行。</p>
   </li>
 </ul>
 
-<p>BLAS英文全称为Basic Linear Algebra Subprograms，是低级矩阵和矢量算术运算集合。LAPACK(Linear Algebra PACKage)即线性代数包，底层是BLAS，在此基础上定义了很多矩阵和向量高级运算的函数，比如矩阵分解（LU, QR, SVD），特征值求解等。所以BLAS和LAPACK看做是接口规范，其他的组织、个人和公司，就可以根据此规范，实现自己的科学计算库（见下图）。</p>
+<h3 id="5-makefile的工作原理">5. Makefile的工作原理</h3>
 
-<p><img src="https://img-blog.csdn.net/20170906135422358" alt="lapack" /></p>
+<p>以这个Makefile文件为例</p>
 
-<p>Eigen、Armadillo自身实现了各种线性代数运算库外，同时还支持上述各种BLAS/LAPACK为基础的底层以加速运算。换句话说，搭了个算法的 架子，但是不管什么算法，它的内部可能涉及刚刚提到的矩阵x矩阵、矩阵x向量之类的运算，这些可以用BLAS/LAPACK算。他们除了自己写了线性运算库，还提供了其他矩阵运算库的接口（Pardiso，PaStiX，SuperLU，etc），所以只要编出这些lib，加进编译路径里，就能通过Eigen的接口调用他们内部的函数了。</p>
+<div class="language-makefile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">A</span><span class="o">:</span><span class="nf">B	</span>
+	<span class="p">@</span><span class="nb">echo</span> <span class="s2">"A"</span>
+<span class="nl">B</span><span class="o">:</span><span class="nf">C	</span>
+	<span class="p">@</span><span class="nb">echo</span> <span class="s2">"B"</span>
+<span class="nl">C</span><span class="o">:</span><span class="nf">D</span>
+	<span class="p">@</span><span class="nb">echo</span> <span class="s2">"C"</span>
+<span class="nl">D</span><span class="o">:</span>	
+	<span class="p">@</span><span class="nb">echo</span> <span class="s2">"D"</span>
+<span class="nl">G</span><span class="o">:</span>	
+	<span class="p">@</span><span class="nb">echo</span> <span class="s2">"G"</span>
+</code></pre></div></div>
 
-<h2 id="3---既然有pardisosuperlu的库为什么要从eigenmkl用它">3.   既然有Pardiso，SuperLU的库，为什么要从Eigen，MKL用它？</h2>
+<p>若执行<code class="highlighter-rouge">make A</code>，输出</p>
 
-<p>以SuperLU为例，pdgssvx（用 parellel LU decomposition解double类型的Ax=b ）的函数有十几个参数要设置，而且传入的矩阵参数是以指针数组。在看Eigen的SuperLU接口，由于Eigen将各种矩阵运算库封装成统一格式， 我们可以直接用Eigen的稀疏矩阵作为参数，然后solver(b)就OK了。MKL，Armadillo也是类似，将这些接口进行了封装，我们不需要考虑矩阵的存储格式和各种难调的参数，这样大大减少了各个求解器接口调用的学习成本。MKL是Intel针对它的CPU系列开发的核心数学运算库，它提供了完整的BLAS和LAPACK实现，高度优化和线程，且内置并行处理机制。Eigen的很多矩阵运算可以用MKL加速（http://eigen.tuxfamily.org/dox-3.2/TopicUsingIntelMKL.html）。 用法如下：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>D
+C
+B
+A
+</code></pre></div></div>
 
-<p>·   在include Eigen头文件前，定义EIGEN_USE_MKL_ALL的宏</p>
+<p>原理：</p>
 
-<p>·   在编译程序时link MKL的库</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. 当执行make A的时候，make程序从当前目录读入makefile，找到A命令。
+2. 发现A depends on B，先执行B指令，B depends on C....以此类推，最终定位到D
+3. 执行D: @echo "D" -&gt; 执行C -&gt; ... -&gt; 执行A
+</code></pre></div></div>
 
-<p>·   Eigen自动将它的一些算法用MKL的routine实现</p>
+<p>若执行<code class="highlighter-rouge">make D</code>，输出</p>
 
-<h2 id="4-哪个库最好">4. 哪个库最好？</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>D
+</code></pre></div></div>
 
-<p>世上不存在万能药。有的库是个超级大礼包，同事包含直接法和迭代法，有的只提供直接法或者迭代法。参考了各个商业软件和开源有限元软件的线性求解库后，我的总结是直接法一般用MUMPS、SuperLU，PaStix，Trillinos可以利用Metis的矩阵重排序功能加速运算。迭代法用PETCs、Trillinos。如果习惯了Matlab，只考虑接口易用性的话，那么可以选择Eigen和Armadillo。</p>
+<p>原理：</p>
 
-<h2 id="5-迭代法那么多用哪个">5. 迭代法那么多用哪个？</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. 当执行make D的时候，make程序从当前目录读入makefile，找到D命令。
+2. 发现D没有depend，直接执行@echo "D"
+</code></pre></div></div>
 
-<p>不知道，大家可以参考这篇论文<a href="https://www.researchgate.net/publication/304771911_A_Comparison_of_Preconditioned_Krylov_Subspace_Methods_for_Nonsymmetric_Linear_Systems">A Comparison of Preconditioned Krylov Subspace Methods for Nonsymmetric Linear Systems</a>。总结下来就是</p>
-
-<blockquote>
-  <p>For large, moderately conditioned, non-saddle-point problems, use GMRES with Boomer- AMG as right preconditioner, with HMIS (or PMIS) coarsening and FF1 interpolation.</p>
-
-  <p>The easiest way to leverage the above recommendation is to use existing software packages. PETSc [5] is an excellent choice, since it supports both left and right preconditioning for GMRES and BiCGSTAB, and it supports BoomerAMG with various options.</p>
-
-  <p>Note that with an effective multigrid preconditioner, BiCGSTAB often converges almost as smoothly as GMRES. Therefore, assuming a multigrid precondition is available, BiCGSTAB can be used in place of GMRES, especially if right-preconditioned GMRES is unavailable but right-preconditioned BiCGSTAB is (such as in MATLAB).</p>
-</blockquote>
-
-<p>GMRES+右预算子，BiCGSTAB也行，具体问题具体调参数。</p>
-
-<p><strong>待完成：线性方程组求解算法的介绍</strong>…..</p>
 
 
 <ul class="taxonomy__index">
@@ -645,8 +704,8 @@
     
   <script>
     var disqus_config = function () {
-      this.page.url = "http://localhost:4000/open-source-libraries-of-linear-system-solvers/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/open-source-libraries-of-linear-system-solvers"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "http://localhost:4000/Makefile-Tutorial1/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/Makefile-Tutorial1"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');
