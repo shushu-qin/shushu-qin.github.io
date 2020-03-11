@@ -5,6 +5,7 @@ caefem.jpg
 *.temp
 # cache
 .jekyll-cache/*
+_posts/.jekyll-cache/Jekyll/Cache/*
 .sass-cache/*
 # drafts
 _posts/drafts/*

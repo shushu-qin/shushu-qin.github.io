@@ -5,7 +5,7 @@ published: true
 layout: posts
 ---
 
-### Install MPICH
+## 1. Install MPICH
 
 这里我们采用MPICH的MPI实现，下载官网http://www.mpich.org/downloads/。Mac系统可以直接通过homebrew安装MPI
 
@@ -13,13 +13,13 @@ layout: posts
 $ brew install mpich
 ```
 
-### 程序基本结构
+## 2. 程序基本结构
 
 - 进入并行环境`MPI_Init`：让系统知道此程序是并行程序，启动并行计算环境。
 - 主体并行程序：实现并行的代码。
 - 退出并行环境`MPI_Finalize`：通知系统，从这里开始，不再使用并行环境。
 
-### 编译MPI Hello world小程序
+## 3. 编译MPI Hello world小程序
 
 所有的MPI函数都是以`MPI_`前缀开头，接 MPI_ 之后的第一个字母大写, 其余全部为小写字母。函数调用结束后会返回int 类型的错误信息码，当 MPI 程序不出错的时候返回`MPI_SUCCESS`。
 

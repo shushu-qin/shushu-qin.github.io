@@ -13,7 +13,7 @@ layout: posts
 * solve
 * Write data to mtx file
 
-### 1. Create left and right hand side 
+## 1. Create left and right hand side 
 
 为了测试Eigen性能，可以利用C++内建的随机数生成器来创建稀疏矩阵
 
@@ -77,7 +77,7 @@ A =
 | InnerIndices: | 1    | 2    | 0    | 2    | 4    |      | nnz  |
 | OuterStarts   | 0    | 2    | 4    | 5    | 6    | 8    | n+1  |
 
-### 2. Solve linear system
+## 2. Solve linear system
 
 * 矩阵重排序：Eigen内部提供了COLAMD, AMD，也可以Metis接口。
 * Preconditioner 设置：[IdentityPreconditioner](https://eigen.tuxfamily.org/dox/classEigen_1_1IdentityPreconditioner.html), [DiagonalPreconditioner](https://eigen.tuxfamily.org/dox/classEigen_1_1DiagonalPreconditioner.html), [IncompleteLUT](https://eigen.tuxfamily.org/dox/classEigen_1_1IncompleteLUT.html)。默认Diagonal Preconditioner。

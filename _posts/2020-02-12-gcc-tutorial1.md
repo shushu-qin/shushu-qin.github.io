@@ -5,7 +5,7 @@ published: true
 layout: posts
 ---
 
-### 1. 简单编译
+## 1. 简单编译
 
 示例程序
 
@@ -39,7 +39,7 @@ $ gcc test.c -o test.out
 $ ./test.out 
 ```
 
-### 2. 更多设置
+## 2. 更多设置
 
 ```
 gcc -Wall -g test.c -o test.out

@@ -5,7 +5,7 @@ var store = [{
         "url": "http://localhost:4000/history-of-finite-element-methods/",
         "teaser":null},{
         "title": "Mac 终端常用指令",
-        "excerpt":"1. 关于.bash_profile   打开bash_profile，修改全局变量      open -e ~/.bash_profile    .bash_profile 是一个隐藏文件，主要是用来配置bash shell的。   ~代表home目录，即每个用户登录系统后所在的目录，通常名称为自己的用户名。   vim中修改bash_profile      vi ~/.bash_profile    让配置文件在修改后立即生效   source ~/.bash_profile   2. Mac系统如何显示隐藏文件？   Command+Shift+. 可以显示隐藏文件、文件夹，再按一次，恢复隐藏； finder下使用Command+Shift+G 可以前往任何文件夹，包括隐藏文件夹。(摘自知乎)   ","categories": [],
+        "excerpt":"1. 关于.bash_profile   打开bash_profile，修改全局变量      open -e ~/.bash_profile    .bash_profile 是一个隐藏文件，主要是用来配置bash shell的。   ~代表home目录，即每个用户登录系统后所在的目录，通常名称为自己的用户名。   vim中修改bash_profile      vi ~/.bash_profile    让配置文件在修改后立即生效   source ~/.bash_profile   2. Mac系统如何显示隐藏文件？   Command+Shift+. 可以显示隐藏文件、文件夹，再按一次，恢复隐藏； finder下使用Command+Shift+G 可以前往任何文件夹，包括隐藏文件夹。(摘自知乎)   如果是在终端可以运行   ls -a   ","categories": [],
         "tags": ["mac","linux"],
         "url": "http://localhost:4000/mac-tips/",
         "teaser":null},{
@@ -29,8 +29,8 @@ var store = [{
         "tags": ["linux"],
         "url": "http://localhost:4000/gcc-tutorial1/",
         "teaser":null},{
-        "title": "MPI安装及编译",
-        "excerpt":"Install MPI 这里我们采用MPICH的MPI实现，下载官网http://www.mpich.org/downloads/。Mac系统可以直接通过homebrew安装MPI $ brew install mpich 程序基本结构 进入并行环境MPI_Init：让系统知道此程序是并行程序，启动并行计算环境。 主体并行程序：实现并行的代码。 退出并行环境MPI_Finalize：通知系统，从这里开始，不再使用并行环境。 编译MPI Hello world小程序 所有的MPI函数都是以MPI_前缀开头，接 MPI_ 之后的第一个字母大写, 其余全部为小写字母。函数调用结束后会返回int 类型的错误信息码，当 MPI 程序不出错的时候返回MPI_SUCCESS。 /* MPI_HelloWorld.c */ #include &lt;stdio.h&gt; #include &lt;mpi.h&gt; // 引入MPI头文件 int main(int argc, char * argv[]) { int info, flag; info = MPI_Init(&amp;argc, &amp;argv); // 初始化MPI // 得到进程数量 int world_size;...","categories": [],
+        "title": "MPICH安装及编译",
+        "excerpt":"1. Install MPICH 这里我们采用MPICH的MPI实现，下载官网http://www.mpich.org/downloads/。Mac系统可以直接通过homebrew安装MPI $ brew install mpich 2. 程序基本结构 进入并行环境MPI_Init：让系统知道此程序是并行程序，启动并行计算环境。 主体并行程序：实现并行的代码。 退出并行环境MPI_Finalize：通知系统，从这里开始，不再使用并行环境。 3. 编译MPI Hello world小程序 所有的MPI函数都是以MPI_前缀开头，接 MPI_ 之后的第一个字母大写, 其余全部为小写字母。函数调用结束后会返回int 类型的错误信息码，当 MPI 程序不出错的时候返回MPI_SUCCESS。 /* MPI_HelloWorld.c */ #include &lt;stdio.h&gt; #include &lt;mpi.h&gt; // 引入MPI头文件 int main(int argc, char * argv[]) { int info, flag; info = MPI_Init(&amp;argc, &amp;argv); // 初始化MPI //...","categories": [],
         "tags": ["HPC","MPI"],
         "url": "http://localhost:4000/MPI-Hello-World/",
         "teaser":null},{
@@ -38,4 +38,14 @@ var store = [{
         "excerpt":"1. 什么是Makefile 大多数的Winodws的程序员不需要深入了解自动化编译流程，因为Windows的IDE(Integrated Development Environment)已经做了相关的工作,比如VC，VB等。而Linux下没有这样的IDE，通常需要程序员做用脚本自行书写。这个脚本就是Makefile，在其中可以指定需要编译哪些文件，哪些先编译，哪些后编译，哪些需要重新编译，最终需要生成怎么样的应用程序。make是一种命令，它用来解释Makefile脚本，并根据脚本中的指定内容，进行操作。当我们在终端输入make时，make指令会自动寻找当前文路径下叫做Makefile（或makefile）的文件，并按照里面所定义的编译规则来编译源代码。 2. Hello World, Makefile! 假设我们有一个hello_world.cpp的文件 #include &lt;iostream&gt; int main() { std::cout &lt;&lt; \"Hello world!\\n\" ; return 0; } 如果直接通过g++编译，我们可以cd到当前文件路径，在终端输入 $ g++ hello_world.cpp -o hello_world 即可编译成hello_world可执行文件。 如果g++命令很长，为了避免每次都要敲那么多文字，我们可以把这些指令写进Makefile里 # 我是注释 CC = g++ # CC，SRCS,EXEC为变量，都是字符串，使用时会完全被替换 SRCS = hello_world.cpp EXEC = hello_world all: $(CC) $(SRCS) -o $(EXEC) #...","categories": [],
         "tags": ["linux"],
         "url": "http://localhost:4000/Makefile-Tutorial1/",
+        "teaser":null},{
+        "title": "Makefile入门2",
+        "excerpt":"本文通过下面这个基本版Makefile来学习Makefile的书写规则。 # makefile example CC = gcc CFLAGS = -Wall -O2 CFLAGS += -I./ -L./ LFLAGS = -lpthread -lm SRCS = fun1.c \\ fun2.c \\ main.c OBJS = $(SRCS:.c=.o) EXEC = test all:$(OBJS) $(CC) $(CFLAGS) $(OBJS) -o $(EXEC) $(LFLAGS) clean: rm -rf $(EXEC) $(OBJS) main.c: #include \"fun1.h\" #include \"fun2.h\" int...","categories": [],
+        "tags": ["linux"],
+        "url": "http://localhost:4000/Makefile-Tutorial2/",
+        "teaser":null},{
+        "title": "Introduction To Openmp",
+        "excerpt":"OpenMP 入门   Getting Started with OpenMP 这个是intel出的一个简单的介绍和教程，总共有三节，看完了自己动手写写代码，就能掌握到常用的方法了。   OpenMP 跟上面一个相比，这个还会包括一些使用方法的说明，查看起来更方面一些吧。我比较喜欢这个教程。另外还有一本中文的教材也可以看看，叫MPI与OpenMP并行程序设计，直接看第十七章就可以了。   教学视频 Introduction to OpenMP 这个是Youtube上的一个教学视频系列，每个小视频五到十分钟，总共22个视频，看看视频，思考一下出的题目，也会很有收获的。这个视频系列有一个pdf文档可以参考看。文档下载请点这里   OpenMP in Visual C++ 这个是微软针对visual studio写的，叫你怎么在vs中写c++代码时使用opencv，因为我就是使用c++代码，所以这个正合我意。不过这个没有什么例子，倒像是字典式的介绍，你可以用来查询。   原文链接：https://blog.csdn.net/yc461515457/article/details/50849468   1. Introduction      Getting started   The core features   working with OpenMP   Advanced application   2. Module 1   ","categories": [],
+        "tags": [],
+        "url": "http://localhost:4000/Introduction-to-OpenMP/",
         "teaser":null}]

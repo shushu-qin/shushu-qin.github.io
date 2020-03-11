@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>How to install gcc on mac - Computational Mechanics Blog</title>
-<meta name="description" content="1. 查看有没有安装gcc">
+<!-- begin _includes/seo.html --><title>Makefile入门2 - Computational Mechanics Blog</title>
+<meta name="description" content="本文通过下面这个基本版Makefile来学习Makefile的书写规则。">
 
 
   <meta name="author" content="Shushu Qin">
@@ -19,30 +19,30 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Computational Mechanics Blog">
-<meta property="og:title" content="How to install gcc on mac">
-<meta property="og:url" content="http://localhost:4000/how-to-install-gcc-on-mac/">
+<meta property="og:title" content="Makefile入门2">
+<meta property="og:url" content="http://localhost:4000/Makefile-Tutorial2/">
 
 
-  <meta property="og:description" content="1. 查看有没有安装gcc">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-01-12T00:00:00+08:00">
+  <meta property="og:description" content="本文通过下面这个基本版Makefile来学习Makefile的书写规则。">
 
 
 
 
 
-  
+
+
+  <meta property="article:published_time" content="2020-02-17T00:00:00+08:00">
+
+
+
+
 
   
 
+  
 
-<link rel="canonical" href="http://localhost:4000/how-to-install-gcc-on-mac/">
+
+<link rel="canonical" href="http://localhost:4000/Makefile-Tutorial2/">
 
 
 
@@ -274,74 +274,105 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">How to install gcc on mac</h1>
+      <h1 id="page-title" class="page__title">Makefile入门2</h1>
     
-    <h2 id="1-查看有没有安装gcc">1. 查看有没有安装gcc</h2>
+    <p>本文通过下面这个基本版Makefile来学习Makefile的书写规则。</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc -v
+<div class="language-makefile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># makefile example
+</span><span class="nv">CC</span>     <span class="o">=</span> gcc
+<span class="nv">CFLAGS</span> <span class="o">=</span> <span class="nt">-Wall</span> <span class="nt">-O2</span> 
+<span class="nv">CFLAGS</span> <span class="o">+=</span> <span class="nt">-I</span>./  <span class="nt">-L</span>./
+<span class="nv">LFLAGS</span> <span class="o">=</span> <span class="nt">-lpthread</span> <span class="nt">-lm</span> 
+
+<span class="nv">SRCS</span>   <span class="o">=</span> fun1.c <span class="se">\</span>
+	       fun2.c  <span class="se">\</span>
+	       main.c
+
+<span class="nv">OBJS</span>   <span class="o">=</span> <span class="nv">$(SRCS:.c=.o)</span>
+
+<span class="nv">EXEC</span>   <span class="o">=</span> <span class="nb">test</span>
+
+<span class="nl">all</span><span class="o">:</span><span class="nf">$(OBJS)</span>
+        <span class="err">$(CC)</span> <span class="err">$(CFLAGS)</span> <span class="err">$(OBJS)</span> <span class="err">-o</span> <span class="err">$(EXEC)</span> <span class="err">$(LFLAGS)</span>
+
+<span class="nl">clean</span><span class="o">:</span>
+        <span class="err">rm</span> <span class="err">-rf</span> <span class="err">$(EXEC)</span> <span class="err">$(OBJS)</span>
 </code></pre></div></div>
 
-<h2 id="2-用homebrew下载gcc">2. 用homebrew下载gcc</h2>
+<p><strong>main.c:</strong></p>
 
-<blockquote>
-  <p>brew search gcc     # 搜索可供下载的gcc版本</p>
-
-  <p>brew install gcc      # 默认下载最新版</p>
-</blockquote>
-
-<p>目前最新版是 gcc-9 (Homebrew GCC 9.2.0_3) 9.2.0。</p>
-
-<h2 id="3-添加路径至bash_profile">3. 添加路径至bash_profile</h2>
-<h3 id="查看当前使用的gcc的路径">查看当前使用的gcc的路径</h3>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>whereis gcc
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "fun1.h"
+#include "fun2.h"
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="n">fun1</span><span class="p">();</span>
+  <span class="n">fun2</span><span class="p">();</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
-<p>一般为/user/local/bin</p>
+<p><strong>fun1.c:</strong></p>
 
-<h3 id="vim中打开bash_profile">vim中打开bash_profile</h3>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi ~/.bash_profile
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include &lt;stdio.h&gt;
+void fun1()
+{
+	printf("This is fun1\n");
+}
 </code></pre></div></div>
 
-<h3 id="添加路径">添加路径</h3>
+<p><strong>fun2.c:</strong></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export PATH="/usr/local/bin:$PATH"
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include &lt;stdio.h&gt;
+void fun2()
+{
+	printf("This is fun2\n");
+}
 </code></pre></div></div>
 
-<h3 id="查看是否生效">查看是否生效</h3>
+<h2 id="1-预定义变量">1. 预定义变量</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo $PATH
+<div class="language-makefile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">CC</span>   <span class="o">=</span> gcc
 </code></pre></div></div>
 
-<p>如果能够在输出中看到刚刚添加的路径就说明添加成功了。</p>
+<p>不管是显式规则还是隐式规则，makefile都有一些预定义的变量， 这些变量有些会在隐式规则中自动带入，有些则是约定俗成的具有特殊意义的变量。</p>
 
-<h2 id="4-添加别名">4. 添加别名</h2>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>alias gcc="gcc-9"
-alias cc="gcc-9"
-alias g++="g++-9"
-alias c++="c++-9"
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CC			:	编译器类型
+CFLAGS	:	编译选项， 通常为-O2 -Wall -I -L
+LFLAGS	:	额外链接库
+EXEC  	:  	应用程序名
+SRCS		:	源代码
+OBJS		:	目标文件
 </code></pre></div></div>
 
-<p>否则系统使用的是clang而不是gcc。</p>
+<h2 id="2-变量追加">2. 变量追加</h2>
 
-<h2 id="5-查看gcc是否生效">5. 查看gcc是否生效</h2>
+<p>同c语言中的<code class="highlighter-rouge">+=</code></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc --version
-输出。。。。。
-gcc-9 (Homebrew GCC 9.2.0_3) 9.2.0
-Copyright (C) 2019 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+<div class="language-makefile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">CFLAGS</span> <span class="o">=</span> <span class="nt">-Wall</span> <span class="nt">-O2</span> 
+<span class="nv">CFLAGS</span> <span class="o">+=</span> <span class="nt">-I</span>./  <span class="nt">-L</span>./
 </code></pre></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc
-输出。。。。。
-gcc-9: fatal error: no input files
-compilation terminated.
+<h2 id="3-变量替换">3. 变量替换</h2>
+
+<p>其格式为：foo = $(var:a=b)，将var变量中的a替换成b，并返回给foo。</p>
+
+<div class="language-makefile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">OBJS</span><span class="o">=</span><span class="nv">$(SRCS:.c=.o)</span> <span class="c">#将SRCS中的".c"字符串替换成".o"，赋值OBJS变量。</span>
 </code></pre></div></div>
 
+<h2 id="4-makefile的隐式规则">4. Makefile的隐式规则</h2>
+
+<p>通过变量字符串展开，例子中的all指令</p>
+
+<div class="language-makefile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">all</span><span class="o">:</span><span class="nf">$(OBJS)</span>
+        <span class="err">$(CC)</span> <span class="err">$(CFLAGS)</span> <span class="err">$(OBJS)</span> <span class="err">-o</span> <span class="err">$(EXEC)</span> <span class="err">$(LFLAGS)</span>
+</code></pre></div></div>
+
+<p>可以转换为</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc -Wall -O2 fun1.o fun2.o main.o -o main -I./  -L./
+</code></pre></div></div>
+
+<p>make在解释Makefile时，若目标是.o文件，那么他会自动的去寻找相应的.c文件， 并隐式的进行编译。这个例子中，目标的依赖为三个.o文件，fun1.o, fun2.o,main.o， make自动推导，找到相应.c文件（ fun1.c fun2.c main.c）生成找到.o文件。</p>
 
 
 <ul class="taxonomy__index">
@@ -707,8 +738,8 @@ compilation terminated.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "http://localhost:4000/how-to-install-gcc-on-mac/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/how-to-install-gcc-on-mac"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "http://localhost:4000/Makefile-Tutorial2/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/Makefile-Tutorial2"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');
