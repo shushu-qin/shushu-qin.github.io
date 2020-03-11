@@ -5,11 +5,11 @@ published: true
 layout: posts
 ---
 
-### 1. 什么是Makefile
+## 1. 什么是Makefile
 
 大多数的Winodws的程序员不需要深入了解自动化编译流程，因为Windows的IDE(Integrated Development Environment)已经做了相关的工作,比如VC，VB等。而Linux下没有这样的IDE，通常需要程序员做用脚本自行书写。这个脚本就是Makefile，在其中可以指定需要编译哪些文件，哪些先编译，哪些后编译，哪些需要重新编译，最终需要生成怎么样的应用程序。make是一种命令，它用来解释Makefile脚本，并根据脚本中的指定内容，进行操作。当我们在终端输入`make`时，`make`指令会自动寻找当前文路径下叫做Makefile（或makefile）的文件，并按照里面所定义的编译规则来编译源代码。
 
-### 2. Hello World, Makefile!
+## 2. Hello World, Makefile!
 
 假设我们有一个`hello_world.cpp`的文件
 
@@ -48,7 +48,7 @@ clean:
 
 编写完后，保存，在当前目录下执行make命令，生成可执行程序hello_world。
 
-### 3. Makefile的组成
+## 3. Makefile的组成
 
 Makefile由以下五个部分组成
 
@@ -60,7 +60,7 @@ Makefile由以下五个部分组成
 
 下面具体介绍一下显示规则
 
-### 4. Makefile的显示规则
+## 4. Makefile的显示规则
 
 可以归纳为一下形式
 
