@@ -1,5 +1,6 @@
 ---
 title: MPICH安装及编译
+category : HPC
 tags: [HPC, MPI]
 published: true
 layout: posts

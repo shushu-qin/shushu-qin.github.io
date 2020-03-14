@@ -1,6 +1,7 @@
 ---
 title: GCC教程1
-tags: linux
+category : Linux
+tags: [Mac,Linux]
 published: true
 layout: posts
 ---

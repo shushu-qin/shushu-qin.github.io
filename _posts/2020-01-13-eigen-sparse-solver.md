@@ -1,5 +1,6 @@
 ---
 title: Basic Steps of Using Eigen to Solve Sparse System
+category : Computational Mechanics
 tags: [C/C++, HPC, Matrix Computations]
 published: true
 layout: posts

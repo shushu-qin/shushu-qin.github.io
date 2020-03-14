@@ -1,6 +1,7 @@
 ---
 title: History of Finite Element Methods
-tags: fem
+category : Computational Mechanics
+tags: FEM
 published: true
 layout: posts
 ---

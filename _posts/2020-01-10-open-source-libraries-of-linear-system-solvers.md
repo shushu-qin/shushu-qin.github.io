@@ -1,6 +1,7 @@
 ---
 title: Open source libraries of Linear system solvers
-tags: [fem, numerical methods, HPC]
+category : Computational Mechanics
+tags: [FEM, Numerical Methods, HPC]
 published: true
 layout: posts
 ---

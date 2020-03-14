@@ -1,6 +1,7 @@
 ---
 title: How to install gcc on mac
-tags: mac
+category : Linux
+tags: [Mac, Linux]
 published: true
 layout: posts
 ---

@@ -1,6 +1,7 @@
 ---
 title: Makefile入门1
-tags: [linux]
+category : Linux
+tags: [Mac, Linux]
 published: true
 layout: posts
 ---
