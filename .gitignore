@@ -9,5 +9,6 @@ _posts/.jekyll-cache/Jekyll/Cache/*
 .sass-cache/*
 # drafts
 _posts/drafts/*
-# _sit
+# _site
+_site/*
 _posts/_site/*
