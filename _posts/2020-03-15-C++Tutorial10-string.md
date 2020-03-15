@@ -1,3 +1,10 @@
+---
+title: C++ string类型
+category : C/C++
+tags: [C/C++]
+published: true
+layout: posts
+---
 string: 可变长字符串的处理。vector一种集合或者容器的概念。
 
 ## 1. string 类型简介
