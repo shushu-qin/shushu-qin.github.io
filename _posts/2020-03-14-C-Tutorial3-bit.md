@@ -6,7 +6,7 @@ published: true
 layout: posts
 ---
 
-## 1 位运算
+## 1. 位运算
 
 ### 1.1 位的概念
 
@@ -75,7 +75,7 @@ unsigned int a = 15 >> 2;  // 7 -> 3
 a & = b;  // a = a&b
 ```
 
-## 2 位运算的应用
+## 2. 位运算的应用
 
 ```c
 #define BIT(x) (1<<(x))  // BIT(0) ==> 1左移0位

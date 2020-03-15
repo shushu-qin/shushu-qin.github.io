@@ -6,7 +6,7 @@ published: true
 layout: posts
 ---
 
-## 1 函数回顾与后置返回类型
+## 1. 函数回顾与后置返回类型
 
 ```c++
 void func(int,int); //函数声明是可以只有形参的类型，没有名
@@ -35,7 +35,7 @@ auto fun(int a,int b) -> void
 }
 ```
 
-## 2 内联函数
+## 2. 内联函数
 
 适用于函数体很小，调用很频繁的函数。
 
@@ -94,7 +94,7 @@ constexpr函数，可以看成是更严格的内联函数
 
 #define宏展开也类似于inline
 
-## 3 函数杂合用法总结
+## 3. 函数杂合用法总结
 
 - 返回void，可以返回一个“返回值为void的函数”
 
@@ -138,7 +138,7 @@ k = 20; //安全
 
 - 引用作形参
 
-## 4 const
+## 4. const
 
 ```c++
 //const int abc = 123;
@@ -163,7 +163,7 @@ const int &a = i;
 const int &b = 10; //succeed 分配了内存的
 ```
 
-## 5 函数形参中带const
+## 5. 函数形参中带const
 
 ```c++
 void f1(const student &stu)

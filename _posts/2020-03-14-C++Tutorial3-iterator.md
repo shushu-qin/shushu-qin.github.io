@@ -6,7 +6,7 @@ published: true
 layout: posts
 ---
 
-## 1 迭代器简介
+## 1. 迭代器简介
 
 迭代器是一种遍历容器内元素的数据类型，有点像指针。我们可以理解为迭代器用来指向容器中的某个元素。
 
@@ -14,7 +14,7 @@ c++中很少用[]访问元素，通常用迭代器，也更通用。
 
 通过迭代器我们可以读或者修改某个元素值。
 
-## 2 容器的迭代器类型
+## 2. 容器的迭代器类型
 
 ```c++
 vector<int> iv = {100,100,200};
@@ -24,7 +24,7 @@ vector<int>::iterator iter; //定义迭代器
 
 ```
 
-## 3 begin/end rbegin/rend
+## 3. begin/end rbegin/rend
 
 begin/end()用来返回迭代类型。
 
@@ -65,7 +65,7 @@ for(vector<int>::reverse_iterator riter = iv.rbegin(); riter != iv.rend(); iter+
 }
 ```
 
-## 4 迭代器运算符
+## 4. 迭代器运算符
 
 - *iter 返回迭代器iter所指向元素的引用。必须保证迭代器指向的是有效的元素。
 
@@ -86,7 +86,7 @@ for(vector<int>::reverse_iterator riter = iv.rbegin(); riter != iv.rend(); iter+
   cout << iter->num << endl;
   ```
 
-## 5 const_iterator迭代器
+## 5. const_iterator迭代器
 
 迭代器指向元素的值不能改变，但是迭代器本身能改变。只能从容器中读元素，像常量指针。
 
@@ -116,7 +116,7 @@ for(auto iter = iv.cbegin(); iter != iv.cend(); iter++)
 }
 ```
 
-## 6 迭代器失效
+## 6. 迭代器失效
 
 ```c++
 vector<int> vec = {1,2,3,4,5};
@@ -134,7 +134,7 @@ for(auto iterm:vec)  //与迭代器操作等价
 }
 ```
 
-## 7 范例
+## 7. 范例
 
 ```c++
 string str("I love China");
