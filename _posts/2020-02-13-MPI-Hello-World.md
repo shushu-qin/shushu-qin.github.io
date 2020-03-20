@@ -61,7 +61,7 @@ $ mpicc -g -o MPI_HelloWorld MPI_HelloWorld.c
 运行需要使用 `mpiexec` 命令
 
 ```
-$ mpiexec -np 2 MPI_HelloWorld
+$ mpiexec -np 2 ./MPI_HelloWorld
 Hello world!
 Hello world!
 ```
