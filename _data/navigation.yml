@@ -1,18 +1,9 @@
-# main links
 main:
-  #- title: "CV"
-  #  url: /assets/cv_shushu.pdf
-  #- title: "About"
-  #   url: about.md
+  - title: "Posts"
+    url: /posts/
   - title: "Categories"
     url: /categories/
   - title: "Tags"
     url: /tags/
-  #- title: "Posts"
-  #  url: /year-archive/
-  # - title: "Sample Posts"
-  #   url: /year-archive/
-  # - title: "Sample Collections"
-  #   url: /collection-archive/
-  # - title: "Sitemap"
-  #   url: /sitemap/
+  - title: "About"
+    url: /about/
