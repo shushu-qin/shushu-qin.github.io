@@ -1,14 +1,4 @@
-secret.yml
-# test
-caefem.jpg
-# temporary files
-*.temp
-# cache
-.jekyll-cache/*
-_posts/.jekyll-cache/Jekyll/Cache/*
-.sass-cache/*
-# drafts
-_posts/drafts/*
-# _site
-_site/*
-_posts/_site/*
+_site
+.sass-cache
+.jekyll-metadata
+Gemfile.lock
