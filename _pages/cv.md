@@ -10,17 +10,16 @@ redirect_from:
 {% include base_path %}
 
 # Education
-- **TU Delft (Netherlands)** (2021.05-present) 
+- **TU Delft (Netherlands)**   (2021.05-present)   
 PhD in Material Science    
 Research Topics: Physics Based Machine Learning || Topology Optimization
-- **Swansea University (UK) + Universitat Politècnica de Catalunya (Spain)** (2017.09 - 2019.08)   
-Msc in Computational Mechanics 
-Thesis: The face-centered finite volume (FCFV) method for steady-state incompressible Navier-Stokes equations
-- **Harbin Institute of Technology (China)**  (2013.09-2017.07)   
-B.E in Civil Engineering 
-- **Ecole Centrale De Nantes (France)** (2016.09-2017.06)
+- **Swansea University (UK) + Universitat Politècnica de Catalunya (Spain)**   (2017.09 - 2019.08)   
+  Msc in Computational Mechanics   
+- **Harbin Institute of Technology (China)**    (2013.09-2017.07)   
+  B.E in Civil Engineering 
+- **Ecole Centrale De Nantes (France)**    (2016.09-2017.06)  
 Exchange Student
-- **National Chiao Tung University (Taiwan, China)** (2016.02-2016.06)   
+- **National Chiao Tung University (Taiwan, China)**    (2016.02-2016.06)   
 Exchange Student 
 
 # Research experience
