@@ -12,7 +12,7 @@ redirect_from:
 # Education
 - **TU Delft (Netherlands)**   (2021.05-present)   
 PhD in Material Science    
-Research Topics: Physics Based Machine Learning || Topology Optimization
+Research Topics: Physics Based Machine Learning || Topology Optimization || Numerical Analysis
 - **Swansea University (UK) + Universitat Politècnica de Catalunya (Spain)**   (2017.09 - 2019.08)   
   Msc in Computational Mechanics   
 - **Harbin Institute of Technology (China)**    (2013.09-2017.07)   
