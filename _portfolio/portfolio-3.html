@@ -1,0 +1,34 @@
+---
+title: "Swansea"
+excerpt: "<br /><img src='/images/gallery/IMG_8.JPG'>"
+collection: portfolio
+---
+
+<!-- ... existing content ... -->
+
+<div class="image-matrix">
+    <img src="/images/gallery/IMG_8.JPG" alt="Picture 1">
+    <img src="/images/gallery/IMG_9.JPG" alt="Picture 2">
+    <img src="/images/gallery/IMG_11.JPG" alt="Picture 3">
+    <img src="/images/gallery/IMG_12.JPG" alt="Picture 4">
+    <!-- Add more images as needed -->
+</div>
+
+<style>
+    .image-matrix {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        /* Adjust the number of columns */
+        gap: 10px;
+        /* Space between images */
+    }
+
+    .image-matrix img {
+        width: 100%;
+        /* Make images responsive */
+        height: auto;
+        /* Maintain aspect ratio */
+    }
+</style>
+
+<!-- ... existing content ... -->
