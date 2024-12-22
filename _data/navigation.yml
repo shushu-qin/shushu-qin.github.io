@@ -20,10 +20,11 @@ main:
   - title: "Tags"
     url: /tags/
 
-  - title: "Portfolio"
-    url: /portfolio/
+  # - title: "Portfolio"
+  #   url: /portfolio/
     
-
+  - title: "Gallery"
+    url: /gallery/
   # - title: "CV"
   #   url: /cv/
     
